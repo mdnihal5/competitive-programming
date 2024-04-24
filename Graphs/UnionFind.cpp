@@ -1,3 +1,4 @@
+//based on rank
 class UnionFind { 
     vector<int> root, rank;
 public:
@@ -25,3 +26,29 @@ public:
     }
     bool connected(int x, int y) { return Find(x) == Find(y); }
 };
+
+// based on size -> 
+class DSU{
+    std::vector<int>par,size;
+    public:
+    DSU(int n):par(n+5),size(n+5){
+        for(int i=1;i<=n;i++) size[i]=1,par[i]=i;
+    }
+    int parent(int x){
+        return (par[x]==x?x:parent(par[x]));   
+    }
+    void unite(int x,int y){
+        int rootx=parent(x),rooty=parent(y);
+        if(rootx==rooty) return;
+        if(size[rootx]<size[rooty]) swap(rootx,rooty);
+        par[rooty]=x;
+        size[rootx]+=size[rooty];
+    }
+    bool connected(int x,int y){
+        return parent(x)==parent(y);
+    }
+    int get_size(int x){
+        return size[x];
+    }
+};
+
