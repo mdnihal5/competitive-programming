@@ -41,7 +41,7 @@ class DSU{
         int rootx=parent(x),rooty=parent(y);
         if(rootx==rooty) return;
         if(size[rootx]<size[rooty]) swap(rootx,rooty);
-        par[rooty]=x;
+        par[rooty]=rootx;
         size[rootx]+=size[rooty];
     }
     bool connected(int x,int y){
