@@ -1,84 +1,96 @@
-class SegmentTree {
-  private:
-    std::vector<int> tree;
-    std::vector<int> lazy;
-    int n, m;
-
-    int combine(int left, int right) {
-        // Modify this function based on your specific use case
-        return (left + right);
+template<typename T>
+class LazySegmentTree {
+private:
+    vector<T> tree, lazy;
+    vector<T> nums;
+    int n;
+    T identity;
+ 
+    bool isValid(int idx) {
+        return idx >= 0 && idx < n;
     }
-
-    void build(std::vector<int> &arr, int v, int tl, int tr) {
-        if (tl == tr) {
-            tree[v] = arr[tl];
-
+ 
+    T combine(T left, T right) {
+        return left + right; // Change this for different operations
+    }
+ 
+    void apply(T &a, T b, int length) {
+        a += b * length; // Change this for different operations
+    }
+ 
+    void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = nums[start];
         } else {
-            int tm = (tl + tr) / 2;
-            build(arr, v * 2, tl, tm);
-            build(arr, v * 2 + 1, tm + 1, tr);
-            tree[v] = combine(tree[v * 2], tree[v * 2 + 1]);
+            int mid = start + (end - start) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
         }
     }
-
-    void push(int v, int tl, int tr) {
-        if (lazy[v] != 0) {
-            tree[v] = (tr - tl + 1) * lazy[v]; // Modify this funcion based on your use case
-
-            if (tl != tr) {
-                lazy[v * 2] = lazy[v];
-                lazy[v * 2 + 1] = lazy[v];
+ 
+    void push(int node, int start, int end) {
+        if (lazy[node] != identity) {
+            apply(tree[node], lazy[node], end - start + 1);
+            if (start != end) {
+                lazy[2 * node] = combine(lazy[2 * node], lazy[node]);
+                lazy[2 * node + 1] = combine(lazy[2 * node + 1], lazy[node]);
             }
-
-            lazy[v] = 0;
+            lazy[node] = identity;
         }
     }
-
-    void update(int v, int tl, int tr, int l, int r, int x) {
-        push(v, tl, tr);
-
-        if (l > r) return;
-
-        if (tl == l && tr == r) {
-            lazy[v] = x;
-            push(v, tl, tr);
-
-        } else {
-            int tm = (tl + tr) / 2;
-            update(v * 2, tl, tm, l, std::min(r, tm), x);
-            update(v * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r, x);
-            tree[v] = combine(tree[v * 2], tree[v * 2 + 1]);
+ 
+    void updateRange(int node, int start, int end, int l, int r, T val) {
+        push(node, start, end);
+        if (r < start || end < l) {
+            return;
         }
-    }
-
-    int query(int v, int tl, int tr, int l, int r) {
-        push(v, tl, tr);
-
-        if (l > r) return 1;
-
-        if (tl == l && tr == r) {
-            return tree[v];
+        if (l <= start && end <= r) {
+            lazy[node] = combine(lazy[node], val);
+            push(node, start, end);
+            return;
         }
-
-        int tm = (tl + tr) / 2;
-        return combine(query(v * 2, tl, tm, l, std::min(r, tm)),
-                       query(v * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r));
+        int mid = start + (end - start) / 2;
+        updateRange(2 * node, start, mid, l, r, val);
+        updateRange(2 * node + 1, mid + 1, end, l, r, val);
+        tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
     }
-
-  public:
-    SegmentTree(std::vector<int> &arr, int mm) {
-        n = arr.size();
-        m = mm;
-        tree.resize(4 * n);
-        lazy.assign(4 * n, 0);
-        build(arr, 1, 0, n - 1);
+ 
+    T queryRange(int node, int start, int end, int l, int r) {
+        push(node, start, end);
+        if (r < start || end < l) {
+            return identity;
+        }
+        if (l <= start && end <= r) {
+            return tree[node];
+        }
+        int mid = start + (end - start) / 2;
+        T leftResult = queryRange(2 * node, start, mid, l, r);
+        T rightResult = queryRange(2 * node + 1, mid + 1, end, l, r);
+        return combine(leftResult, rightResult);
     }
-
-    void updateRange(int l, int r, int x) {
-        update(1, 0, n - 1, l, r, x);
+ 
+public:
+    LazySegmentTree(const vector<T>& nums, T identity) : nums(nums), identity(identity) {
+        n = nums.size();
+        tree.resize(4 * n, identity);
+        lazy.resize(4 * n, identity);
+        build(1, 0, n - 1);
     }
-
-    int queryRange(int l, int r) {
-        return query(1, 0, n - 1, l, r);
+ 
+    LazySegmentTree(int size, T identity) : identity(identity) {
+        n = size;
+        nums.resize(n, identity);
+        tree.resize(4 * n, identity);
+        lazy.resize(4 * n, identity);
+        build(1, 0, n - 1);
+    }
+ 
+    void updateRange(int l, int r, T val) {
+        updateRange(1, 0, n - 1, l, r, val);
+    }
+ 
+    T queryRange(int l, int r) {
+        return queryRange(1, 0, n - 1, l, r);
     }
 };
