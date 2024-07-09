@@ -63,8 +63,8 @@ struct PolyHash {
             if (suff[i] >= prime) suff[i] -= prime;
         }
     }
-    PolyHash (const char* str)
-        : PolyHash (vector<char> (str, str + strlen (str) ) ) {}
+    PolyHash (const string &str)
+        : PolyHash (vector<char> (str.begin(), str.end() ) ) {}
 
     uint64_t hash (int l, int r) {
         int64_t h = pref[r + 1] - primemul (base_pow[r - l + 1], pref[l]);
