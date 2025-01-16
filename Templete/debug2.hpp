@@ -8,25 +8,25 @@
 
 // Operator overloads for custom types
 template <class T1, class T2>
-ostream &operator<<(ostream &os, const pair<T1, T2> &p) {
+ostream &operator<< (ostream &os, const pair<T1, T2> &p) {
     return os << COLOR_BRACKET_1 << "{" << COLOR_RESET << COLOR_VAR << p.first << COLOR_RESET << ", " << COLOR_VALUE <<
            p.second << COLOR_RESET << COLOR_BRACKET_1 << "}";
 }
 
-template <class T, class = decltype(begin(declval<T>())),
-          class = enable_if_t<!is_same<T, string>::value>>
-ostream &operator<<(ostream &os, const T &c) {
+template < class T, class = decltype (begin (declval<T>() ) ),
+           class = enable_if_t < !is_same<T, string>::value >>
+ostream & operator<< (ostream &os, const T &c) {
     os << COLOR_BRACKET_1 << "[" << COLOR_RESET;
 
-    for (auto it = begin(c); it != end(c); ++it)
-        os << (it == begin(c) ? "" : ", ") << COLOR_VALUE << *it << COLOR_RESET;
+    for (auto it = begin (c); it != end (c); ++it)
+        os << (it == begin (c) ? "" : ", ") << COLOR_VALUE << *it << COLOR_RESET;
 
     return os << COLOR_BRACKET_1 << "]" << COLOR_RESET;
 }
 
 // Support for deque
 template <class T>
-ostream &operator<<(ostream &os, const deque<T> &c) {
+ostream &operator<< (ostream &os, const deque<T> &c) {
     os << COLOR_BRACKET_2 << "[" << COLOR_RESET;
 
     for (auto it = c.begin(); it != c.end(); ++it)
@@ -37,15 +37,15 @@ ostream &operator<<(ostream &os, const deque<T> &c) {
 
 // Support for priority_queue
 template <class T, class Container, class Compare>
-ostream &operator<<(ostream &os, const priority_queue<T, Container, Compare> &pq) {
+ostream &operator<< (ostream &os, const priority_queue<T, Container, Compare> &pq) {
     os << COLOR_BRACKET_3 << "priority_queue [" << COLOR_RESET;
     auto c = pq;
 
-    while (!c.empty()) {
+    while (!c.empty() ) {
         os << COLOR_VALUE << c.top() << COLOR_RESET;
         c.pop();
 
-        if (!c.empty()) os << ", ";
+        if (!c.empty() ) os << ", ";
     }
 
     return os << COLOR_BRACKET_3 << "]" << COLOR_RESET;
@@ -72,3 +72,4 @@ ostream &operator<<(ostream &os, const priority_queue<T, Container, Compare> &pq
     cout << "\033[2;31mLine " << __LINE__ << ": \033[0;m" << endl;              \
     FOR_EACH_MACRO(watch, __VA_ARGS__)                                           \
     cout << "\n"
+
