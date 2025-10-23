@@ -1,103 +1,69 @@
-#define ll long long
-#define pb push_back
-
-class SegTree {
-public:
-    SegTree(int n): n(n), mn(4*n, 0), mx(4*n, 0), lz(4*n, 0) {}
-    
-    void add(int l, int r, int v) {
-        if(l <= r) add(l, r, v, 1, 0, n-1);
-    }
-    
-    int get(int pos) {
-        return get(pos, 1, 0, n-1);
-    }
-
-    int firstEq(int T, int Rmax) {
-        return firstEq(T, Rmax, 1, 0, n-1);
-    }
-
-private:
+class SegmentTree {
+    struct Node {
+        int mn = 0, mx = 0, sum = 0, lazy = 0;
+        bool has_lazy = false;
+    };
     int n;
-    std::vector<int> mn, mx, lz;
-    
-    void apply(int idx,int v){
-        mn[idx]+=v;
-        mx[idx]+=v;
-        lz[idx]+=v;
-    }
-    
-    void push(int idx){
-        if(lz[idx]){
-            apply(idx<<1,lz[idx]);
-            apply(idx<<1|1,lz[idx]);
-            lz[idx]=0;
-        }
-    }
-    
-    void add(int l, int r, int v, int idx, int L, int R) {
-        if(l > R || r < L || l > r) return;
-        if(l <= L && R <= r) {
-            apply(idx, v);
-            return;
-        }
-        push(idx);
-        
-        int M = (L + R)>>1;
-        add(l, r, v, idx<<1, L, M);
-        add(l, r, v, idx<<1|1, M+1, R);
-        mn[idx] = min(mn[idx<<1], mn[idx<<1|1]);
-        mx[idx] = max(mx[idx<<1], mx[idx<<1|1]);
-    }
+    vector<Node> t;
 
-    int get(int pos, int idx, int L, int R) {
-        if(L == R) return mn[idx];
-        push(idx);
-        int M = (L+R)>>1;
-
-        if(pos <= M) return get(pos, idx<<1, L, M);
-        else return get(pos, idx<<1|1, M+1, R);
+    void apply(int p, int l, int r, int v) {
+        t[p].mn += v;
+        t[p].mx += v;
+        t[p].sum += v * (r - l + 1);
+        if (t[p].has_lazy) t[p].lazy += v;
+        else { t[p].lazy = v; t[p].has_lazy = true; }
     }
-    
-    int firstEq(int T, int Rmax, int idx, int L, int R) {
-        if(Rmax < 0 || L > Rmax) return -1;
-        if(T < mn[idx] || T > mx[idx]) return -1;
-        if(L == R) return L;
-
-        push(idx);
-        int M = (L+R)>>1;
-        int left = firstEq(T, Rmax, idx<<1, L, M);
-
-        if(left != -1) return left;
-        return firstEq(T, Rmax, idx<<1|1, M+1, R);
+    void push(int p, int l, int r) {
+        if (!t[p].has_lazy || l == r) return;
+        int m = (l + r) >> 1;
+        apply(p<<1, l, m, t[p].lazy);
+        apply(p<<1|1, m+1, r, t[p].lazy);
+        t[p].lazy = 0;
+        t[p].has_lazy = false;
     }
-};
-
-class Solution {
+    void pull(int p) {
+        t[p].mn = min(t[p<<1].mn, t[p<<1|1].mn);
+        t[p].mx = max(t[p<<1].mx, t[p<<1|1].mx);
+        t[p].sum = t[p<<1].sum + t[p<<1|1].sum;
+    }
+    void range_add(int p, int l, int r, int L, int R, int v) {
+        if (R < l || r < L) return;
+        if (L <= l && r <= R) { apply(p, l, r, v); return; }
+        push(p, l, r);
+        int m = (l + r) >> 1;
+        range_add(p<<1, l, m, L, R, v);
+        range_add(p<<1|1, m+1, r, L, R, v);
+        pull(p);
+    }
+    Node query(int p, int l, int r, int L, int R) {
+        if (R < l || r < L) return {INT_MAX, INT_MIN, 0, 0, false};
+        if (L <= l && r <= R) return t[p];
+        push(p, l, r);
+        int m = (l + r) >> 1;
+        Node a = query(p<<1, l, m, L, R);
+        Node b = query(p<<1|1, m+1, r, L, R);
+        Node res;
+        res.mn = min(a.mn, b.mn);
+        res.mx = max(a.mx, b.mx);
+        res.sum = a.sum + b.sum;
+        return res;
+    }
+    int find_right_val(int p, int l, int r, int val) {
+        if (t[p].mn > val || t[p].mx < val) return -1;
+        if (l == r) return (t[p].mn == val ? l : -1);
+        push(p, l, r);
+        int m = (l + r) >> 1;
+        int res = find_right_val(p<<1|1, m+1, r, val);
+        if (res != -1) return res;
+        return find_right_val(p<<1, l, m, val);
+    }
 public:
-    int longestBalanced(vector<int>& nums) {
-        int n = nums.size();
-        int ans = 0;
-        
-        SegTree st(n);
-        vector<int> last(100001, -1);
-
-        for(int r = 0; r < n; r++) {
-            int x = nums[r];
-            int s = ((x & 1) == 0) ? 1 : -1;
-            int p = last[x];
-
-            if(p != -1) st.add(p, n-1, -s);
-            st.add(r, n-1, s);
-
-            int T = st.get(r);
-            if(T == 0) ans = max(ans, r+1);
-            
-            int i = st.firstEq(T, r-1);
-            if(i != -1) ans = max(ans, r - i);
-            last[x] = r;
-        }
-
-        return ans;
-    }
+    SegmentTree(int n): n(n), t(4*n+5) {}
+    void Add(int L, int R, int v) { range_add(1, 1, n, L, R, v); }
+    int Min(int L, int R) { return query(1, 1, n, L, R).mn; }
+    int Max(int L, int R) { return query(1, 1, n, L, R).mx; }
+    int Sum(int L, int R) { return query(1, 1, n, L, R).sum; }
+    Node Query(int L, int R) { return query(1, 1, n, L, R); }
+    int FindR(int val) { return find_right_val(1, 1, n, val); }
+    void Set(int pos, int INF) { add(pos, pos, INF); }
 };
