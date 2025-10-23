@@ -1,96 +1,109 @@
-template<typename T>
-class LazySegmentTree {
-private:
-    vector<T> tree, lazy;
-    vector<T> nums;
-    int n;
-    T identity;
- 
-    bool isValid(int idx) {
-        return idx >= 0 && idx < n;
+struct Node{
+    int mn, mx, ly;
+};
+struct segtree{
+    int n; 
+    vector<Node> st;
+    segtree(int N=0){
+        init(N);
     }
- 
-    T combine(T left, T right) {
-        return left + right; // Change this for different operations
+    void init(int N){
+        n = N;
+        st.assign(4*(n+5), {0,0,0});
     }
- 
-    void apply(T &a, T b, int length) {
-        a += b * length; // Change this for different operations
+    void apply(int p, int val){
+        st[p].mn += val;
+        st[p].mx += val;
+        st[p].ly += val;
     }
- 
-    void build(int node, int start, int end) {
-        if (start == end) {
-            tree[node] = nums[start];
-        } else {
-            int mid = start + (end - start) / 2;
-            build(2 * node, start, mid);
-            build(2 * node + 1, mid + 1, end);
-            tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
+    void push(int p){
+        if(st[p].ly != 0){
+            apply(p<<1, st[p].ly);
+            apply(p<<1|1, st[p].ly);
+            st[p].ly = 0;
         }
     }
- 
-    void push(int node, int start, int end) {
-        if (lazy[node] != identity) {
-            apply(tree[node], lazy[node], end - start + 1);
-            if (start != end) {
-                lazy[2 * node] = combine(lazy[2 * node], lazy[node]);
-                lazy[2 * node + 1] = combine(lazy[2 * node + 1], lazy[node]);
-            }
-            lazy[node] = identity;
-        }
+    void pull(int p){
+        st[p].mn = min(st[p<<1].mn, st[p<<1|1].mn);
+        st[p].mx = max(st[p<<1].mx, st[p<<1|1].mx);
     }
- 
-    void updateRange(int node, int start, int end, int l, int r, T val) {
-        push(node, start, end);
-        if (r < start || end < l) {
-            return;
+    void ra(int p, int l, int r, int L, int R, int val){
+        if(R<l or r<L) return ;
+        if(L<=l and r<=R){
+            apply(p, val);
+            return ;
         }
-        if (l <= start && end <= r) {
-            lazy[node] = combine(lazy[node], val);
-            push(node, start, end);
-            return;
-        }
-        int mid = start + (end - start) / 2;
-        updateRange(2 * node, start, mid, l, r, val);
-        updateRange(2 * node + 1, mid + 1, end, l, r, val);
-        tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
+        push(p);
+        int m = (l+r)>>1;
+        ra(p<<1, l, m, L, R, val);
+        ra(p<<1|1, m+1, r, L, R, val);
+        pull(p);
     }
- 
-    T queryRange(int node, int start, int end, int l, int r) {
-        push(node, start, end);
-        if (r < start || end < l) {
-            return identity;
-        }
-        if (l <= start && end <= r) {
-            return tree[node];
-        }
-        int mid = start + (end - start) / 2;
-        T leftResult = queryRange(2 * node, start, mid, l, r);
-        T rightResult = queryRange(2 * node + 1, mid + 1, end, l, r);
-        return combine(leftResult, rightResult);
+    void ra(int L, int R, int val){
+        if(L>R) return ;
+        ra(1, 0, n, L, R, val);
     }
- 
+    int pq(int p, int l, int r, int i){
+        if(l==r) return st[p].mn;
+        push(p);
+        int m = (l+r)>>1;
+        if(i<=m) return pq(p<<1, l, m, i);
+        else return pq(p<<1|1, m+1, r, i);
+    }
+    int pq(int p){
+        return pq(1, 0, n, p);
+    }
+    int fre(int p, int l, int r, int L, int R, int t){
+        if(R<l or r<L) return -1;
+        if(L<=l and r<=R){
+            if(t<st[p].mn or t>st[p].mx) return -1;
+            if(l==r) return l;
+        }
+        push(p);
+        int m = (l+r)>>1;
+        int res = fre(p<<1|1, m+1, r, L, R, t);
+        if(res!=-1) return res;
+        return fre(p<<1, l, m, L, R, t);
+    }
+    int fre(int L, int R, int t){
+        if(L>R) return -1;
+        return fre(1, 0, n, L, R, t);
+    }
+    
+};
+
+class Solution {
 public:
-    LazySegmentTree(const vector<T>& nums, T identity) : nums(nums), identity(identity) {
-        n = nums.size();
-        tree.resize(4 * n, identity);
-        lazy.resize(4 * n, identity);
-        build(1, 0, n - 1);
-    }
- 
-    LazySegmentTree(int size, T identity) : identity(identity) {
-        n = size;
-        nums.resize(n, identity);
-        tree.resize(4 * n, identity);
-        lazy.resize(4 * n, identity);
-        build(1, 0, n - 1);
-    }
- 
-    void updateRange(int l, int r, T val) {
-        updateRange(1, 0, n - 1, l, r, val);
-    }
- 
-    T queryRange(int l, int r) {
-        return queryRange(1, 0, n - 1, l, r);
+    int longestBalanced(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int, int> l;
+        vector<int> p(n+1, 0);
+        for(int i=1; i<=n; i++){
+            if(l.count(nums[i-1])) p[i] = l[nums[i-1]];
+            else p[i] = 0;
+            l[nums[i-1]] = i;
+        }
+        vector<vector<int>> b(n+1);
+        for(int i=1; i<=n; i++){
+            b[p[i]].push_back(i);
+        }
+        segtree st(n);
+        for(auto i:b[0]){
+            int sg = (nums[i-1]%2) ? -1 : 1;
+            st.ra(i, n, sg);
+        }
+        int ans = 0;
+        for(int i=1; i<=n; i++){
+            int t = st.pq(i-1);
+            int r = st.fre(i, n, t);
+            if(r!=-1) ans = max(ans, r-i+1);
+            if(i<=n){
+                for(auto j:b[i]){
+                    int sg = (nums[j-1]%2) ? -1 : 1;
+                    st.ra(j, n, sg);
+                }
+            }
+        }
+        return ans;
     }
 };
