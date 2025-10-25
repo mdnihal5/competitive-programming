@@ -58,7 +58,7 @@ class SegmentTree {
         return find_right_val(p<<1, l, m, val);
     }
 public:
-    SegmentTree(int n): n(n), t(4*n+5) {}
+    SegmentTree(int n): n(n), t(4*n+5) {} // 1 based and [ inclusive ]
     void Add(int L, int R, int v) { range_add(1, 1, n, L, R, v); }
     int Min(int L, int R) { return query(1, 1, n, L, R).mn; }
     int Max(int L, int R) { return query(1, 1, n, L, R).mx; }
@@ -67,3 +67,5 @@ public:
     int FindR(int val) { return find_right_val(1, 1, n, val); }
     void Set(int pos, int INF) { Add(pos, pos, INF); }
 };
+
+// SegmentTree st(n);
