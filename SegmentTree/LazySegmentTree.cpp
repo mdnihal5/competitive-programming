@@ -65,5 +65,5 @@ public:
     int Sum(int L, int R) { return query(1, 1, n, L, R).sum; }
     Node Query(int L, int R) { return query(1, 1, n, L, R); }
     int FindR(int val) { return find_right_val(1, 1, n, val); }
-    void Set(int pos, int INF) { add(pos, pos, INF); }
+    void Set(int pos, int INF) { Add(pos, pos, INF); }
 };
