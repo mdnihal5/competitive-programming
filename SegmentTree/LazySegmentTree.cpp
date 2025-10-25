@@ -58,7 +58,7 @@ class SegmentTree {
         return find_right_val(p<<1, l, m, val);
     }
 public:
-    SegmentTree(int n): n(n), t(4*n+5) {} // 1 based and [ inclusive ]
+    SegmentTree(int n): n(n), t(4*n+5) {} // 1 based and [ L,R ]
     void Add(int L, int R, int v) { range_add(1, 1, n, L, R, v); }
     int Min(int L, int R) { return query(1, 1, n, L, R).mn; }
     int Max(int L, int R) { return query(1, 1, n, L, R).mx; }
