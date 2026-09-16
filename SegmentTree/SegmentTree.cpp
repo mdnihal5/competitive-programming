@@ -1,75 +1,62 @@
-template<typename T>
-class SegmentTree {
-private:
-    vector<T> tree;
-    vector<T> nums;
+// Author : md_nihal
+// Source/adapted-from: existing repo, rewritten iterative (bottom-up)
+#include "bits/stdc++.h"
+using namespace std;
+#define all(x) x.begin(),x.end()
+#define ALL(x) x.rbegin(),x.rend()
+#define int long long
+#define endl "\n"
+const int mod = 1E9 + 7, MAX = 1E7 + 7, N = 1E5 + 5, inf = 1E18;
+
+/* ---- SNIPPET START ---- */
+template<typename T, typename F>
+struct SegTree {
     int n;
-    T identity;
- 
-    bool isValid(int idx) {
-        return idx >= 0 && idx < n;
+    vector<T> t;
+    T id;
+    F combine;
+    SegTree(const vector<T> &a, T id, F combine) : n(a.size()), t(2 * n, id), id(id), combine(combine) {
+        for (int i = 0; i < n; i++) t[i + n] = a[i];
+        for (int i = n - 1; i > 0; i--) t[i] = combine(t[2 * i], t[2 * i + 1]);
     }
- 
-    T combine(T left, T right) {
-        return left + right;
+    void update(int i, T val) {
+        for (t[i += n] = val; i > 1; i >>= 1) t[i >> 1] = combine(t[i], t[i ^ 1]);
     }
- 
-    void build(int node, int start, int end) {
-        if (start == end) {
-            tree[node] = nums[start];
-        } else {
-            int mid = start + (end - start) / 2;
-            build(2 * node, start, mid);
-            build(2 * node + 1, mid + 1, end);
-            tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
+    T query(int l, int r) { // [l, r] inclusive, 0-indexed
+        T resl = id, resr = id;
+        for (l += n, r += n + 1; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) resl = combine(resl, t[l++]);
+            if (r & 1) resr = combine(t[--r], resr);
         }
-    }
- 
-    void update(int node, int start, int end, int idx) {
-        if (start == end) {
-            tree[node] = nums[start];
-        } else {
-            int mid = start + (end - start) / 2;
-            if (start <= idx && idx <= mid) {
-                update(2 * node, start, mid, idx);
-            } else {
-                update(2 * node + 1, mid + 1, end, idx);
-            }
-            tree[node] = combine(tree[2 * node], tree[2 * node + 1]);
-        }
-    }
- 
-    T query(int node, int start, int end, int l, int r) {
-        if (r < start || end < l) {
-            return identity;
-        }
-        if (l <= start && end <= r) {
-            return tree[node];
-        }
-        int mid = start + (end - start) / 2;
-        T leftResult = query(2 * node, start, mid, l, r);
-        T rightResult = query(2 * node + 1, mid + 1, end, l, r);
-        return combine(leftResult, rightResult);
-    }
- 
-public:
-    SegmentTree(const vector<T>& nums, T identity) : nums(nums), identity(identity) {
-        n = nums.size();
-        tree.resize(4 * n, identity);
-        build(1, 0, n - 1);
-    }
-    SegmentTree(int size, T identity) : identity(identity) {
-        n = size;
-        nums.resize(n, identity);
-        tree.resize(4 * n, identity);
-        build(1, 0, n - 1);
-    }
-    void update(int idx, T val) {
-        nums[idx] = val;
-        update(1, 0, n - 1, idx);
-    }
- 
-    T query(int l, int r) {
-        return query(1, 0, n - 1, l, r);
+        return combine(resl, resr);
     }
 };
+/* ---- SNIPPET END ---- */
+
+#ifdef LOCAL_TEST
+int32_t main() {
+    mt19937 rng(1313);
+    int n = 30;
+    vector<int> a(n);
+    for (auto &x : a) x = rng() % 100;
+
+    SegTree st_sum(a, 0LL, [](int x, int y) { return x + y; });
+    SegTree st_min(a, (long long)INT_MAX, [](int x, int y) { return min(x, y); });
+
+    for (int iter = 0; iter < 3000; iter++) {
+        if (rng() % 3 == 0) {
+            int idx = rng() % n, val = rng() % 100;
+            a[idx] = val;
+            st_sum.update(idx, val);
+            st_min.update(idx, val);
+        } else {
+            int l = rng() % n, r = rng() % n; if (l > r) swap(l, r);
+            int esum = 0, emin = INT_MAX;
+            for (int i = l; i <= r; i++) { esum += a[i]; emin = min(emin, a[i]); }
+            assert(st_sum.query(l, r) == esum);
+            assert(st_min.query(l, r) == emin);
+        }
+    }
+    cout << "OK\n";
+}
+#endif

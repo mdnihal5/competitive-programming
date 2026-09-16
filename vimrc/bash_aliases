@@ -1,0 +1,62 @@
+# ---------------------------------------------------------------------------
+# Competitive programming launcher
+#
+# This is a shell FUNCTION, not a script, because it needs to `cd` your shell
+# into the problem directory -- a script runs in a subshell and its cd is lost
+# when it exits.
+#
+#   cstart                -> $CSTART_DIR/A.cpp
+#   cstart xyz            -> $CSTART_DIR/xyz.cpp
+#   cstart abcd x,y,z     -> $CSTART_DIR/abcd/{x,y,z}.cpp   (opens x.cpp)
+#   cstart abcd x y z     -> same; commas and spaces both work
+#
+# Two or more args => first is the contest folder, the rest are problem names.
+# One arg          => it is the file name, created directly in $CSTART_DIR.
+# Every case also creates input.txt/output.txt in that same directory (used
+# by <F7>). .cpp files are created EMPTY -- type normal<Tab> in vim for the
+# template. Existing files are never overwritten. Your shell stays in the dir.
+#
+# Override the base with:  export CSTART_DIR=~/somewhere-else
+# ---------------------------------------------------------------------------
+
+: "${CSTART_DIR:=$HOME/contest}"
+export CSTART_DIR
+
+# Files are created EMPTY -- the template comes from UltiSnips instead: open
+# the file and type `normal<Tab>` (or <C-j>), same snippet as everywhere else.
+cstart() {
+    local base="${CSTART_DIR:-$HOME/contest}"
+    local dir names
+
+    if [ $# -ge 2 ]; then
+        dir="$base/$1"; shift
+        names="$*"
+    elif [ $# -eq 1 ]; then
+        dir="$base"; names="$1"
+    else
+        dir="$base"; names="A"
+    fi
+
+    names="${names//,/ }"          # accept x,y,z as well as x y z
+
+    mkdir -p "$dir" || return 1
+    cd "$dir" || return 1
+
+    local first="" n f
+    for n in $names; do
+        f="${n%.cpp}.cpp"
+        [ -z "$first" ] && first="$f"
+        if [ -e "$f" ]; then
+            echo "cstart: $f already exists, left untouched"
+        else
+            : > "$f"
+            echo "cstart: created $dir/$f (empty)"
+        fi
+    done
+
+    # scratch files used by the <F7> mapping (./prog < input.txt > output.txt)
+    [ -e input.txt ] || : > input.txt
+    [ -e output.txt ] || : > output.txt
+
+    "${EDITOR:-vim}" "$first"
+}

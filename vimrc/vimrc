@@ -1,0 +1,234 @@
+"==============================================================================
+" Author: md_nihal
+" Description: Clean Vim setup for C++ competitive programming.
+" Portable across Ubuntu (native g++) and macOS Apple Silicon (Homebrew g++).
+" One-time Mac setup: brew install gcc astyle
+"==============================================================================
+
+call plug#begin('~/.vim/plugged')
+Plug 'joshdick/onedark.vim'
+Plug 'SirVer/ultisnips'
+call plug#end()
+
+syntax on
+filetype plugin indent on
+colorscheme onedark
+
+set number
+set relativenumber
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set mouse=a
+set noswapfile
+set clipboard=unnamedplus
+set encoding=utf-8
+set fileformat=unix
+set autoindent
+set lazyredraw
+
+"------------------------------------------------------------------------------
+" Clipboard & selection — all work in NORMAL, INSERT and VISUAL mode.
+" ('set clipboard=unnamedplus' above already sends every yank to the system
+"  clipboard, so plain y/yy copy too. These are explicit conveniences.)
+"------------------------------------------------------------------------------
+
+" Ctrl+C — copy to system clipboard
+"   visual : copies the selection
+"   normal : copies the current line
+"   insert : copies the current line, then puts you back where you were typing
+vnoremap <C-c> "+y
+nnoremap <C-c> "+yy
+inoremap <C-c> <Esc>"+yygi
+
+" Ctrl+A — select all
+vnoremap <C-a> <Esc>ggVG
+nnoremap <C-a> ggVG
+inoremap <C-a> <Esc>ggVG
+
+" Because Ctrl+A above steals Vim's INCREMENT-NUMBER command, move it to + / -
+" (+ and - normally just move down/up a line — which j/k already do, so they're
+"  free). Put the cursor on a number and press + to bump it, - to lower it.
+" A count works too:  10+  adds ten.  In visual mode, g+ makes an incrementing
+" sequence out of a column of numbers.
+nnoremap + <C-a>
+nnoremap - <C-x>
+vnoremap + g<C-a>
+vnoremap - g<C-x>
+
+" Ctrl+P — paste from system clipboard (normal + visual).
+" Deliberately NOT mapped in insert mode: there, Ctrl+P is Vim's keyword
+" completion, which is too useful to lose.
+nnoremap <C-p> "+p
+vnoremap <C-p> "+p
+
+function! Format()
+  silent! execute 'normal! mz'
+
+  " IMPORTANT FIX:
+  " Do NOT let AStyle reflow C++ code (prevents comment shifting issue)
+  if &ft ==# 'c' || &ft ==# 'cpp' || &ft ==# 'hpp' || &ft ==# 'cc'
+    " safest possible usage for your build
+    silent! execute '%!astyle --options=$HOME/.astylerc --quiet'
+  elseif &ft ==# 'java'
+    silent! execute '%!astyle --quiet'
+  elseif &ft ==# 'php'
+    silent! execute '%!astyle --mode=cs --quiet'
+  endif
+
+  silent! call RemoveTrailingSpaces()
+  silent! execute 'normal! `z'
+endfunction
+
+function! RemoveTrailingSpaces()
+  silent! %s/\s\+$//e
+endfunction
+
+"------------------------------------------------------------------------------
+" SUBMIT: format the whole file + copy ALL of it to the clipboard.
+" This is the "ready to paste into Codeforces/LeetCode/AtCoder" key.
+" Bound to Ctrl+B and <Space>y, in normal / insert / visual mode.
+"------------------------------------------------------------------------------
+function! FormatAndCopyAll()
+  " Remember exactly where we were, so formatting doesn't move the cursor.
+  let l:view = winsaveview()
+
+  " Order matters: format FIRST, then copy, then save. (Saving before formatting
+  " would leave the un-formatted version on disk.)
+  silent! call Format()       " astyle + strip trailing whitespace
+  silent! %yank +             " yank the ENTIRE buffer into the + (system) clipboard
+  silent! update              " write the formatted result to disk
+
+  " You're on Wayland, where Vim's clipboard has to bridge through XWayland and
+  " sometimes silently drops. wl-copy talks to Wayland directly, so push it
+  " through that as well — whichever works, the clipboard ends up correct.
+  if !empty($WAYLAND_DISPLAY) && executable('wl-copy')
+    call system('wl-copy', join(getline(1, '$'), "\n"))
+  elseif has('mac') && executable('pbcopy')
+    call system('pbcopy', join(getline(1, '$'), "\n"))
+  endif
+
+  call winrestview(l:view)    " put the cursor back
+  echo 'Formatted + copied ' . line('$') . ' lines to clipboard'
+endfunction
+
+" Ctrl+B works in all three modes. (Ctrl+B is normally 'page up', which you
+" never use because Ctrl+U does it better.)
+nnoremap <C-b> :call FormatAndCopyAll()<CR>
+inoremap <C-b> <Esc>:call FormatAndCopyAll()<CR>
+vnoremap <C-b> <Esc>:call FormatAndCopyAll()<CR>
+
+" <Space>y as an alias — normal and visual ONLY. Never map <Space> in insert
+" mode: there, a space followed by a letter is just you typing a word.
+nnoremap <Space>y :call FormatAndCopyAll()<CR>
+vnoremap <Space>y <Esc>:call FormatAndCopyAll()<CR>
+
+nnoremap <C-f> :call Format()<CR>
+vnoremap <C-f> :call Format()<CR>
+nnoremap <Space>f :call Format()<CR>
+vnoremap <Space>f :call Format()<CR>
+
+nnoremap <F5> :w<CR>:call Format()<CR>
+
+"------------------------------------------------------------------------------
+" Cross-platform compiler resolution.
+"
+" Ubuntu: /usr/bin/g++ is real GNU g++ (libstdc++) -- bits/stdc++.h and PBDS
+"   (<ext/pb_ds/...>, used by ordered_set/ordered_map in the templates) work
+"   out of the box.
+" macOS: /usr/bin/g++ is actually Apple Clang wearing a g++ name -- it has
+"   NEITHER bits/stdc++.h NOR PBDS (both need real GNU libstdc++; Clang's
+"   libc++ doesn't provide them). Fix, once, on a Mac: `brew install gcc`.
+"   That installs real GNU g++ as a versioned binary (g++-14, g++-15, ...)
+"   under /opt/homebrew/bin (Apple Silicon) or /usr/local/bin (Intel). The
+"   function below picks the newest one by version number (not lexical sort,
+"   which would wrongly rank g++-9 after g++-14), so this file never needs a
+"   hardcoded version number that goes stale on a Homebrew upgrade.
+"------------------------------------------------------------------------------
+function! s:ResolveCompiler()
+  if has('mac')
+    for l:prefix in ['/opt/homebrew/bin/', '/usr/local/bin/']
+      let l:found = glob(l:prefix . 'g++-*', 0, 1)
+      if !empty(l:found)
+        call sort(l:found, {a, b -> str2nr(matchstr(a, '\d\+$')) - str2nr(matchstr(b, '\d\+$'))})
+        return l:found[-1]
+      endif
+    endfor
+    echohl WarningMsg | echom 'No Homebrew g++ found -- run: brew install gcc' | echohl None
+    return 'g++'
+  endif
+  return 'g++'
+endfunction
+
+let g:cpp_compiler = s:ResolveCompiler()
+
+function! CompileAndRun(flags, input, clear_output, output_file)
+  execute 'w'
+  let l:cmd = ''
+
+  if a:clear_output
+    let l:cmd .= 'clear && '
+  endif
+
+  " Raise the stack limit before running. Deep recursion (DFS/segment-tree
+  " builds on ~1e5+ nodes) can silently stack-overflow -- and macOS hard-caps
+  " the stack at 64MB no matter what you ask for, vs. Linux which usually
+  " grants far more. This gets each platform as close to its own ceiling as
+  " it allows; it does not make the two platforms equal, so genuinely deep
+  " recursion still needs an iterative rewrite regardless of this.
+  let l:cmd .= 'ulimit -s 65500 2>/dev/null; '
+
+  let l:cmd .= g:cpp_compiler . ' ' . a:flags . ' -o %< %'
+
+  if !empty(a:input)
+    let l:cmd .= ' && ./%< < ' . a:input
+  else
+    let l:cmd .= ' && ./%<'
+  endif
+
+  if !empty(a:output_file)
+    let l:cmd .= ' > ' . a:output_file
+  endif
+
+  execute '!' . l:cmd
+endfunction
+
+let g:common_flags =
+\ '-std=c++23 -Wall -Wextra -Wshadow -Wno-misleading-indentation ' .
+\ '-Wno-unused-variable -Wno-sign-compare'
+
+" F8 -- FULL DEBUG SUITE: warnings + debug() output (COLOR_* macros, watch(),
+" debugi(), debugg() from debug.hpp) + ASan/UBSan runtime checks, all in one.
+" Clears the screen first; you type input directly and see output directly
+" (no file redirection -- that's F7's job, see below).
+nnoremap <F8> :call CompileAndRun(g:common_flags . ' -O2 -g -DDEBUG -fsanitize=address,undefined', '', 1, '')<CR>
+
+" F9 -- CLEAN RUN: same interactive mechanic as F8 (clears screen, type input,
+" see output directly) but with NO warnings, NO debug() output, NO sanitizers --
+" just your program's actual stdin/stdout, nothing else on screen.
+nnoremap <F9> :call CompileAndRun('-std=c++23 -O2', '', 1, '')<CR>
+
+" F7 -- unchanged: batch-tests against input.txt, writes to output.txt.
+nnoremap <F7> :call CompileAndRun('-std=c++23 -O2 -Wall -Wextra', 'input.txt', 0, 'output.txt')<CR>
+
+" F6 -- unchanged: quick compile+run with warnings, no debug/sanitizers, no
+" screen clear (output accumulates below your previous run).
+nnoremap <F6> :call CompileAndRun(g:common_flags . ' -O2 -DLOCAL', '', 0, '')<CR>
+
+nnoremap <Space>b :call Format()<CR>:w<CR>:call CompileAndRun(g:common_flags . ' -O2 -DLOCAL', '', 0, '')<CR>
+
+" NOTE: <Plug>(ultisnips_expand) is not defined by this UltiSnips version, so
+" the old mappings silently did nothing. These call the function directly,
+" mirroring how UltiSnips defines its own <Tab> trigger. <Tab> still works too.
+inoremap <silent> <C-j> <C-R>=UltiSnips#ExpandSnippetOrJump()<CR>
+snoremap <silent> <C-j> <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips']
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+autocmd BufWritePre *.cpp,*.cc,*.hpp,*.h,*.c silent! call Format()
+
+augroup cpp_files
+  autocmd!
+  autocmd BufNewFile,BufRead *.cpp,*.cc,*.cxx,*.hpp,*.h setlocal filetype=cpp
+augroup END
