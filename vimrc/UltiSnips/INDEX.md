@@ -376,6 +376,15 @@ int best = opt.answer();
 ```
 Source: `DP/KnuthOpt.cpp`
 
+### `CHT` — convex hull trick, max/min line envelope
+```cpp
+LineContainer lc;
+lc.add(k, m);            // insert line y = k*x + m
+lc.query(x);              // max over all inserted lines at x
+// for MIN: lc.add(-k, -m), then -lc.query(x)
+```
+Source: `DP/ConvexHullTrick.cpp`
+
 ## Misc
 
 ### `MinStack` — O(1) stack with running minimum
