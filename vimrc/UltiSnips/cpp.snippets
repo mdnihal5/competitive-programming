@@ -45,13 +45,14 @@ endsnippet
 snippet list "Print every available trigger + description (read live from INDEX.md)"
 `!p
 import re, os
+bt = chr(96)  # UltiSnips ends a `!p` block at the next literal backtick -- can't write one directly here
 idx = os.path.expanduser('~/Personal/competitive-programming/vimrc/UltiSnips/INDEX.md')
 out = ['/*', ' * Available templates -- trigger : description (INDEX.md has full usage)']
 try:
     f = open(idx)
     for raw in f:
         m_cat = re.match(r'^## (.+)', raw)
-        m_trig = re.match(r'^### `([^`]+)`\s+—\s+(.+)', raw)
+        m_trig = re.match(r'^### ' + bt + r'([^' + bt + r']+)' + bt + r'\s+—\s+(.+)', raw)
         if m_cat:
             out.append(' *')
             out.append(' * ' + m_cat.group(1).strip())
