@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CP Template Catalogue</title>
+<meta name="description" content="Card-catalogue index of a C++ competitive-programming template library — struct-encapsulated, brute-force tested, pasted via Vim/UltiSnips.">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22&gt;&lt;rect width=%2232%22 height=%2232%22 fill=%22%23e7d9b9%22/&gt;&lt;rect x=%224%22 y=%228%22 width=%2224%22 height=%2216%22 fill=%22none%22 stroke=%22%232a2318%22 stroke-width=%222%22/&gt;&lt;line x1=%228%22 y1=%2214%22 x2=%2224%22 y2=%2214%22 stroke=%22%239c3b2e%22 stroke-width=%222%22/&gt;&lt;line x1=%228%22 y1=%2219%22 x2=%2218%22 y2=%2219%22 stroke=%22%232a2318%22 stroke-width=%222%22/&gt;&lt;/svg&gt;">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f1e8d6;
+  --paper-alt: #e7d9b9;
+  --paper-hi: #f8f2e4;
+  --rule: #c2ae7c;
+  --rule-soft: #d9cba0;
+  --ink: #2a2318;
+  --ink-soft: #6b5d45;
+  --stamp-teal: #2f6658;
+  --stamp-red: #9c3b2e;
+  --wood: #7a5738;
+  --wood-ink: #f3e9d2;
+  --shadow: rgba(42,35,24,.35);
+  --focus: #9c3b2e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17130f;
+    --paper-alt: #201a13;
+    --paper-hi: #241d15;
+    --rule: #4a3f2c;
+    --rule-soft: #362d20;
+    --ink: #ecdfc0;
+    --ink-soft: #ab9872;
+    --stamp-teal: #7ec3ab;
+    --stamp-red: #e08a6b;
+    --wood: #cbab7f;
+    --wood-ink: #1b150e;
+    --shadow: rgba(0,0,0,.55);
+    --focus: #e08a6b;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #17130f;
+  --paper-alt: #201a13;
+  --paper-hi: #241d15;
+  --rule: #4a3f2c;
+  --rule-soft: #362d20;
+  --ink: #ecdfc0;
+  --ink-soft: #ab9872;
+  --stamp-teal: #7ec3ab;
+  --stamp-red: #e08a6b;
+  --wood: #cbab7f;
+  --wood-ink: #1b150e;
+  --shadow: rgba(0,0,0,.55);
+  --focus: #e08a6b;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Spectral", "Noto Serif", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--stamp-red); color: var(--paper-hi); }
+a { color: inherit; }
+code, .mono { font-family: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace; }
+h1, h2, h3 { text-wrap: balance; font-weight: 600; }
+p { text-wrap: pretty; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header : the catalogue front ---------- */
+header.front {
+  border-bottom: 3px solid var(--ink);
+  padding: 40px 0 26px;
+  position: relative;
+}
+.front-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.front-mark {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  padding: 3px 8px;
+}
+.front h1 {
+  margin: 14px 0 6px;
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: -.01em;
+  line-height: 1.05;
+}
+.front .sub {
+  margin: 0 0 18px;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 18px;
+  max-width: 62ch;
+}
+.front-meta {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.front-meta a { color: var(--stamp-teal); text-decoration: none; border-bottom: 1px solid currentColor; }
+.front-meta a:hover { color: var(--stamp-red); }
+.theme-toggle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--ink); }
+
+/* ---------- instruction + manifest cards ---------- */
+.pair {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 780px) { .pair { grid-template-columns: 1fr; } }
+.panel { padding: 28px 0; }
+.panel + .panel { border-left: 1px dashed var(--rule); padding-left: 28px; }
+@media (max-width: 780px) {
+  .panel + .panel { border-left: none; padding-left: 0; border-top: 1px dashed var(--rule); }
+}
+.panel-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--stamp-red);
+  margin: 0 0 10px;
+}
+.panel h2 { margin: 0 0 12px; font-size: 21px; }
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 7px 0 7px 30px;
+  border-top: 1px dotted var(--rule-soft);
+  font-size: 15px;
+}
+.steps li:first-child { border-top: none; }
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--stamp-teal);
+  border: 1px solid var(--stamp-teal);
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.steps code { background: var(--paper-alt); padding: 1px 5px; font-size: 13.5px; }
+.note {
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  border-left: 2px solid var(--stamp-red);
+  padding-left: 10px;
+}
+
+table.manifest { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.manifest th {
+  text-align: left;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+  padding: 0 8px 8px 0;
+  border-bottom: 1px solid var(--ink);
+}
+table.manifest td { padding: 7px 8px 7px 0; border-top: 1px dotted var(--rule-soft); vertical-align: top; }
+table.manifest tr:first-child td { border-top: none; }
+.m-path { font-family: "JetBrains Mono", monospace; font-weight: 500; white-space: nowrap; }
+.m-count { font-family: "JetBrains Mono", monospace; text-align: right; color: var(--stamp-teal); font-variant-numeric: tabular-nums; }
+.manifest-foot { margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); }
+
+/* ---------- index rail ---------- */
+.rail-outer {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.rail {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scrollbar-width: thin;
+}
+.rail-tab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  text-decoration: none;
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--paper-alt);
+  border: 1px solid var(--rule);
+  border-bottom: 2px solid var(--wood);
+  padding: 6px 10px 5px;
+  white-space: nowrap;
+}
+.rail-tab:hover { border-bottom-color: var(--stamp-red); }
+.rail-code { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--stamp-red); font-size: 11px; }
+.search-row { display: flex; align-items: center; gap: 10px; padding: 4px 0 12px; }
+.search-row input {
+  flex: 1;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  background: var(--paper-hi);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 9px 12px;
+}
+.search-row input::placeholder { color: var(--ink-soft); }
+.search-row input:focus-visible { outline: 2px solid var(--focus); outline-offset: 0; }
+.search-hint { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+kbd { border: 1px solid var(--rule); padding: 1px 5px; font-family: "JetBrains Mono", monospace; font-size: 10.5px; }
+
+/* ---------- drawers ---------- */
+main { padding: 30px 0 60px; }
+.drawer { margin-bottom: 22px; }
+.drawer summary.tab {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--wood);
+  color: var(--wood-ink);
+  padding: 10px 14px;
+  border: 1px solid var(--ink);
+  user-select: none;
+}
+.drawer summary.tab::-webkit-details-marker { display: none; }
+.drawer summary.tab::before {
+  content: "\25B8";
+  font-size: 13px;
+  transition: transform .15s ease;
+  flex: 0 0 auto;
+}
+.drawer[open] summary.tab::before { transform: rotate(90deg); }
+.tab-code { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+.tab-name { font-size: 17px; font-weight: 600; }
+.tab-folder { font-family: "JetBrains Mono", monospace; font-size: 12px; opacity: .8; }
+.tab-count { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 11.5px; opacity: .85; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  gap: 14px;
+  padding: 16px 2px 4px;
+}
+.card {
+  background: var(--paper-hi);
+  border: 1px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--shadow);
+  padding: 12px 14px 13px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  left: 10px; right: 10px; top: 0;
+  border-top: 1px dashed var(--rule);
+}
+.card-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.callnum { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--stamp-red); font-weight: 700; letter-spacing: .03em; }
+.prov { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+.trigger { margin: 0 0 6px; font-family: "JetBrains Mono", monospace; font-size: 16.5px; font-weight: 700; }
+.blurb { margin: 0 0 9px; font-size: 14px; color: var(--ink); flex: 1; }
+code.hint {
+  display: block;
+  font-size: 11.5px;
+  color: var(--stamp-teal);
+  background: var(--paper-alt);
+  padding: 6px 8px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.card-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px dotted var(--rule-soft); padding-top: 8px; }
+.cplx { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+a.src { font-family: "JetBrains Mono", monospace; font-size: 11.5px; text-decoration: none; color: var(--stamp-teal); border-bottom: 1px solid transparent; }
+a.src:hover { border-bottom-color: var(--stamp-teal); }
+.src-inline { font-size: 11px; color: var(--ink-soft); font-family: "JetBrains Mono", monospace; }
+.src-inline code { color: var(--ink); }
+
+.card.is-hidden { display: none; }
+.drawer.is-empty { display: none; }
+.no-results { display: none; padding: 30px 4px; color: var(--ink-soft); font-style: italic; }
+.no-results.show { display: block; }
+
+/* ---------- key ---------- */
+.key { padding: 22px 0 6px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-soft); }
+.key-row { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: "JetBrains Mono", monospace; font-size: 12px; }
+.key-row b { color: var(--stamp-red); }
+
+/* ---------- footer ---------- */
+footer {
+  border-top: 3px solid var(--ink);
+  padding: 22px 0 40px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+footer a { color: var(--stamp-teal); text-decoration: none; border-bottom: 1px solid currentColor; }
+footer a:hover { color: var(--stamp-red); }
+
+@media print {
+  .rail-outer, .theme-toggle, .search-row { display: none !important; }
+  .drawer summary.tab { background: none; color: var(--ink); border: 1px solid var(--ink); }
+  .card { box-shadow: none; break-inside: avoid; }
+  body { background: #fff; color: #000; }
+}
+@media (max-width: 480px) {
+  .front-top { flex-direction: column; }
+  body { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="front">
+    <div class="front-top">
+      <span class="front-mark">card catalogue &middot; competitive programming</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light/dark">&#9788; / &#9789;</button>
+    </div>
+    <h1>Template Catalogue</h1>
+    <p class="sub">48 pasteable C++ templates, indexed the way a contest actually needs them found &mdash; by trigger, not by scrolling. Every card is a struct with a test attached, not a snippet that happens to work once.</p>
+    <div class="front-meta">
+      <span>48 entries &middot; 10 drawers</span>
+      <a href="https://github.com/mdnihal5/competitive-programming" target="_blank" rel="noopener">source &#8594;</a>
+      <a href="https://github.com/mdnihal5/competitive-programming/blob/main/Readme.md" target="_blank" rel="noopener">readme &#8594;</a>
+      <a href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/UltiSnips/INDEX.md" target="_blank" rel="noopener">snippet index &#8594;</a>
+      <span>verified 2026-09-17</span>
+    </div>
+  </header>
+
+  <section class="pair">
+    <div class="panel">
+      <p class="panel-label">how to pull a card</p>
+      <h2>Using a template</h2>
+      <ol class="steps">
+        <li>Open a <code>.cpp</code> file, type <code>normal</code>, hit Tab &mdash; the base template.</li>
+        <li>Type any trigger below (e.g. <code>DSU</code>, <code>SegTree</code>, <code>BinaryLift</code>) and Tab again.</li>
+        <li>No snippets installed? Open the file in this repo and copy everything between <code>SNIPPET START</code> and <code>SNIPPET END</code>.</li>
+        <li>Run <code>tests/run_all.sh</code> to compile and run every template's own stress test.</li>
+      </ol>
+      <p class="note">Triggers never redeclare <code>all</code> / <code>int</code> / <code>mod</code> / <code>N</code> / <code>inf</code> &mdash; they assume <code>normal</code> already ran. Every struct is self-contained, so two cards never collide when pasted together.</p>
+    </div>
+    <div class="panel">
+      <p class="panel-label">what's in the drawer</p>
+      <h2>Folder structure</h2>
+      <table class="manifest">
+        <thead><tr><th>path</th><th>contents</th><th>cards</th></tr></thead>
+        <tbody>
+      <tr><td class="m-path">Templete/</td><td class="m-desc">base template, debug printer, order-statistics tree</td><td class="m-count">3</td></tr>
+      <tr><td class="m-path">Graphs/</td><td class="m-desc">shortest paths, connectivity, flow, tree decomposition</td><td class="m-count">10</td></tr>
+      <tr><td class="m-path">Trees/</td><td class="m-desc">weighted-tree path queries</td><td class="m-count">1</td></tr>
+      <tr><td class="m-path">Strings/</td><td class="m-desc">matching automata, suffix structures, hashing</td><td class="m-count">5</td></tr>
+      <tr><td class="m-path">Maths/</td><td class="m-desc">modular arithmetic, combinatorics, number theory</td><td class="m-count">8</td></tr>
+      <tr><td class="m-path">SegmentTree/</td><td class="m-desc">range query / range update structures, 6 variants</td><td class="m-count">6</td></tr>
+      <tr><td class="m-path">FenwickTree/</td><td class="m-desc">BIT and its range / 2D extensions</td><td class="m-count">4</td></tr>
+      <tr><td class="m-path">RMQ/</td><td class="m-desc">O(1)-query sparse tables, 1D and 2D</td><td class="m-count">2</td></tr>
+      <tr><td class="m-path">DP/</td><td class="m-desc">scaffolds and classic transition optimizations</td><td class="m-count">6</td></tr>
+      <tr><td class="m-path">Others/</td><td class="m-desc">3 catalogued utilities + 4 uncatalogued (smoke-tested only)</td><td class="m-count">3</td></tr>
+      <tr><td class="m-path">vimrc/</td><td class="m-desc">the .vimrc, cpp.snippets, INDEX.md and bash_aliases this catalogue mirrors</td><td class="m-count">—</td></tr>
+      <tr><td class="m-path">tests/</td><td class="m-desc">run_all.sh — compiles + runs every template&#x27;s own LOCAL_TEST block</td><td class="m-count">—</td></tr>
+        </tbody>
+      </table>
+      <p class="manifest-foot">macOS needs <code>brew install gcc astyle</code> once &mdash; Apple's own <code>g++</code> is Clang and has neither <code>bits/stdc++.h</code> nor PBDS.</p>
+    </div>
+  </section>
+
+  <div class="rail-outer">
+    <div class="search-row">
+      <input type="search" id="search" placeholder="search the index &mdash; trigger, keyword, complexity&hellip;" aria-label="Search templates">
+      <span class="search-hint">press <kbd>/</kbd> to focus</span>
+    </div>
+    <nav class="rail" aria-label="Drawer index">
+<a href="#drawer-BASE" class="rail-tab"><span class="rail-code">BASE</span>Base</a>
+<a href="#drawer-GR" class="rail-tab"><span class="rail-code">GR</span>Graphs</a>
+<a href="#drawer-TR" class="rail-tab"><span class="rail-code">TR</span>Trees</a>
+<a href="#drawer-ST" class="rail-tab"><span class="rail-code">ST</span>Strings</a>
+<a href="#drawer-MA" class="rail-tab"><span class="rail-code">MA</span>Math</a>
+<a href="#drawer-SG" class="rail-tab"><span class="rail-code">SG</span>Segment trees</a>
+<a href="#drawer-FN" class="rail-tab"><span class="rail-code">FN</span>Fenwick trees</a>
+<a href="#drawer-RM" class="rail-tab"><span class="rail-code">RM</span>RMQ</a>
+<a href="#drawer-DP" class="rail-tab"><span class="rail-code">DP</span>DP scaffolds</a>
+<a href="#drawer-MC" class="rail-tab"><span class="rail-code">MC</span>Misc</a>
+    </nav>
+  </div>
+
+  <main id="drawers">
+<details class="drawer" id="drawer-BASE" open>
+      <summary class="tab">
+        <span class="tab-code">BASE</span>
+        <span class="tab-name">Base</span>
+        <span class="tab-folder">Templete/</span>
+        <span class="tab-count">3 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="normal base template: macros, fast io, debug include ">
+        <div class="card-top">
+          <span class="callnum">BASE-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">normal</h3>
+        <p class="blurb">base template: macros, fast IO, debug include</p>
+        <code class="hint">type normal, Tab -- everything else assumes this ran first</code>
+        <div class="card-bottom">
+          <span class="cplx"></span>
+          <span class="src src-inline">in <code>cpp.snippets</code></span>
+        </div>
+      </article>
+      <article class="card" data-search="pbds order-statistics set/map -- kth element, count-less-than templete/pbds.cpp">
+        <div class="card-top">
+          <span class="callnum">BASE-02</span>
+          <span class="prov">ed. standard</span>
+        </div>
+        <h3 class="trigger">PBDS</h3>
+        <p class="blurb">order-statistics set/map -- kth element, count-less-than</p>
+        <code class="hint">s.find_by_order(1); s.order_of_key(4);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Templete/PBDS.cpp" target="_blank" rel="noopener">PBDS.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="debug.hpp colored pretty-printer for containers, pairs, tuples templete/debug.hpp">
+        <div class="card-top">
+          <span class="callnum">BASE-03</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">debug.hpp</h3>
+        <p class="blurb">colored pretty-printer for containers, pairs, tuples</p>
+        <code class="hint">debug(v); debugi(arr); debugg(adj);</code>
+        <div class="card-bottom">
+          <span class="cplx"></span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Templete/debug.hpp" target="_blank" rel="noopener">debug.hpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-GR" open>
+      <summary class="tab">
+        <span class="tab-code">GR</span>
+        <span class="tab-name">Graphs</span>
+        <span class="tab-folder">Graphs/</span>
+        <span class="tab-count">10 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="dsu disjoint-set union, path compression + union by size graphs/dsu.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">DSU</h3>
+        <p class="blurb">disjoint-set union, path compression + union by size</p>
+        <code class="hint">dsu.unite(u,v); dsu.connected(u,v); dsu.compSize(u);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(a(n))</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/DSU.cpp" target="_blank" rel="noopener">DSU.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="dijkstra shortest paths, non-negative weights graphs/dijkstra.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">Dijkstra</h3>
+        <p class="blurb">shortest paths, non-negative weights</p>
+        <code class="hint">dj.addEdge(u,v,w); dj.run(src); dj.dist[v];</code>
+        <div class="card-bottom">
+          <span class="cplx">O((n+m) log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/Dijkstra.cpp" target="_blank" rel="noopener">Dijkstra.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="bellmanford shortest paths with negative weights + cycle detection graphs/bellmanford.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-03</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">BellmanFord</h3>
+        <p class="blurb">shortest paths with negative weights + cycle detection</p>
+        <code class="hint">bf.dist[v]; bf.poisoned[v]  // -inf vs unreachable</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n*m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BellmanFord.cpp" target="_blank" rel="noopener">BellmanFord.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="binarylift lca, kth ancestor, distance via binary lifting graphs/binarylifting.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-04</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">BinaryLift</h3>
+        <p class="blurb">LCA, kth ancestor, distance via binary lifting</p>
+        <code class="hint">bl.lca(u,v); bl.dist(u,v); bl.kthAncestor(u,k);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n) query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BinaryLifting.cpp" target="_blank" rel="noopener">BinaryLifting.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="scc tarjan&#x27;s strongly connected components, iterative graphs/scc.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-05</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">SCC</h3>
+        <p class="blurb">Tarjan&#x27;s strongly connected components, iterative</p>
+        <code class="hint">scc.run(); scc.comp[v]; scc.sccCount;</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n+m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/SCC.cpp" target="_blank" rel="noopener">SCC.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="bridges bridges + articulation points in one dfs graphs/bridgesarticulation.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-06</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">Bridges</h3>
+        <p class="blurb">bridges + articulation points in one DFS</p>
+        <code class="hint">ba.bridges; ba.isArt[v];</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n+m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BridgesArticulation.cpp" target="_blank" rel="noopener">BridgesArticulation.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="toposort topological sort, kahn&#x27;s algorithm graphs/toposort.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-07</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">TopoSort</h3>
+        <p class="blurb">topological sort, Kahn&#x27;s algorithm</p>
+        <code class="hint">auto order = topoSort(n, adj);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n+m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/TopoSort.cpp" target="_blank" rel="noopener">TopoSort.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="hld heavy-light decomposition for path queries graphs/hld.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-08</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">HLD</h3>
+        <p class="blurb">heavy-light decomposition for path queries</p>
+        <code class="hint">hld.process(u,v,[&amp;](l,r){ ... });</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log^2 n) / path</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/HLD.cpp" target="_blank" rel="noopener">HLD.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="centroid centroid decomposition of a tree graphs/centroiddecomposition.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-09</span>
+          <span class="prov">ed. cp-algorithms</span>
+        </div>
+        <h3 class="trigger">Centroid</h3>
+        <p class="blurb">centroid decomposition of a tree</p>
+        <code class="hint">cd.centroidParent[v];</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n log n) build</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/CentroidDecomposition.cpp" target="_blank" rel="noopener">CentroidDecomposition.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="dinic max flow, dinic&#x27;s algorithm graphs/dinic.cpp">
+        <div class="card-top">
+          <span class="callnum">GR-10</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">Dinic</h3>
+        <p class="blurb">max flow, Dinic&#x27;s algorithm</p>
+        <code class="hint">dn.addEdge(u,v,cap); dn.maxflow(s,t);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(E sqrt V) unit-cap</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/Dinic.cpp" target="_blank" rel="noopener">Dinic.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-TR" open>
+      <summary class="tab">
+        <span class="tab-code">TR</span>
+        <span class="tab-name">Trees</span>
+        <span class="tab-folder">Trees/</span>
+        <span class="tab-count">1 card</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="weightedlca lca + weighted path distance via binary lifting trees/weightedlca.cpp">
+        <div class="card-top">
+          <span class="callnum">TR-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">WeightedLCA</h3>
+        <p class="blurb">LCA + weighted path distance via binary lifting</p>
+        <code class="hint">wl.lca(u,v); wl.dist(u,v);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n) query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Trees/WeightedLCA.cpp" target="_blank" rel="noopener">WeightedLCA.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-ST" open>
+      <summary class="tab">
+        <span class="tab-code">ST</span>
+        <span class="tab-name">Strings</span>
+        <span class="tab-folder">Strings/</span>
+        <span class="tab-count">5 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="zfunction z-function + pattern occurrences strings/zfunction.cpp">
+        <div class="card-top">
+          <span class="callnum">ST-01</span>
+          <span class="prov">ed. cp-algorithms</span>
+        </div>
+        <h3 class="trigger">ZFunction</h3>
+        <p class="blurb">Z-function + pattern occurrences</p>
+        <code class="hint">auto occ = ZFunction::findOccurrences(p,t);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/ZFunction.cpp" target="_blank" rel="noopener">ZFunction.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="kmp prefix-function string matching strings/kmp.cpp">
+        <div class="card-top">
+          <span class="callnum">ST-02</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">KMP</h3>
+        <p class="blurb">prefix-function string matching</p>
+        <code class="hint">vector&lt;int&gt; occ = kmp.match(text);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n+m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/KMP.cpp" target="_blank" rel="noopener">KMP.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="suffixarray suffix array + kasai&#x27;s lcp strings/suffixarray.cpp">
+        <div class="card-top">
+          <span class="callnum">ST-03</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">SuffixArray</h3>
+        <p class="blurb">suffix array + Kasai&#x27;s LCP</p>
+        <code class="hint">sa.sa[i]; sa.rnk[i]; sa.lcp[i];</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n log^2 n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/SuffixArray.cpp" target="_blank" rel="noopener">SuffixArray.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="ahocorasick multi-pattern matching automaton strings/ahocorasick.cpp">
+        <div class="card-top">
+          <span class="callnum">ST-04</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">AhoCorasick</h3>
+        <p class="blurb">multi-pattern matching automaton</p>
+        <code class="hint">ac.addPattern(p); ac.build(); ac.countMatches(t);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n+m+z)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/AhoCorasick.cpp" target="_blank" rel="noopener">AhoCorasick.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="polyhash anti-hash-test-safe polynomial hash, string or array strings/polyhash.cpp">
+        <div class="card-top">
+          <span class="callnum">ST-05</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">PolyHash</h3>
+        <p class="blurb">anti-hash-test-safe polynomial hash, string or array</p>
+        <code class="hint">h.get(l,r); h.combine(lh, rh, rlen);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1) / query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/PolyHash.cpp" target="_blank" rel="noopener">PolyHash.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-MA" open>
+      <summary class="tab">
+        <span class="tab-code">MA</span>
+        <span class="tab-name">Math</span>
+        <span class="tab-folder">Maths/</span>
+        <span class="tab-count">8 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="modint modular integer type with operators maths/modint.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">ModInt</h3>
+        <p class="blurb">modular integer type with operators</p>
+        <code class="hint">mint a=2; power(a,3); inverse(a);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log MOD)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/ModInt.cpp" target="_blank" rel="noopener">ModInt.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="ncr ncr/npr, auto-ready, sized to the base template&#x27;s n ">
+        <div class="card-top">
+          <span class="callnum">MA-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">nCr</h3>
+        <p class="blurb">nCr/nPr, auto-ready, sized to the base template&#x27;s N</p>
+        <code class="hint">fac.ncr(n,r); fac.npr(n,r);  // built into normal, instantiated as fac</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1) / query</span>
+          <span class="src src-inline">in <code>cpp.snippets</code></span>
+        </div>
+      </article>
+      <article class="card" data-search="comb ncr/npr with a custom max-n maths/combinatorics.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-03</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">Comb</h3>
+        <p class="blurb">nCr/nPr with a custom max-N</p>
+        <code class="hint">Combinatorics C(200000); C.nCr(10,3);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1) / query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/Combinatorics.cpp" target="_blank" rel="noopener">Combinatorics.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="crt chinese remainder theorem, two congruences maths/crt.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-04</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">CRT</h3>
+        <p class="blurb">Chinese Remainder Theorem, two congruences</p>
+        <code class="hint">auto [x,L] = crt(a,m,b,n);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/CRT.cpp" target="_blank" rel="noopener">CRT.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="totient euler&#x27;s totient of a single value maths/totient.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-05</span>
+          <span class="prov">ed. cp-algorithms</span>
+        </div>
+        <h3 class="trigger">Totient</h3>
+        <p class="blurb">Euler&#x27;s totient of a single value</p>
+        <code class="hint">int f = phi(36);  // 12</code>
+        <div class="card-bottom">
+          <span class="cplx">O(sqrt n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/Totient.cpp" target="_blank" rel="noopener">Totient.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="fastpow binary exponentiation + inverse, runtime modulus maths/fastpow.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-06</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">FastPow</h3>
+        <p class="blurb">binary exponentiation + inverse, runtime modulus</p>
+        <code class="hint">FastPow::power(b,e,m); FastPow::inverse(n,m);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log e)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/FastPow.cpp" target="_blank" rel="noopener">FastPow.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="ntt polynomial multiplication mod 998244353 maths/ntt.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-07</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">NTT</h3>
+        <p class="blurb">polynomial multiplication mod 998244353</p>
+        <code class="hint">auto c = NTT::multiply(a,b);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/NTT.cpp" target="_blank" rel="noopener">NTT.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="sieve linear sieve, primality + factorization maths/primes.cpp">
+        <div class="card-top">
+          <span class="callnum">MA-08</span>
+          <span class="prov">ed. cp-algorithms</span>
+        </div>
+        <h3 class="trigger">Sieve</h3>
+        <p class="blurb">linear sieve, primality + factorization</p>
+        <code class="hint">sv.isPrime(97); sv.factorize(360);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(N) build</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/primes.cpp" target="_blank" rel="noopener">primes.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-SG" open>
+      <summary class="tab">
+        <span class="tab-code">SG</span>
+        <span class="tab-name">Segment trees</span>
+        <span class="tab-folder">SegmentTree/</span>
+        <span class="tab-count">6 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="segtree iterative point-update range-query, generic op segmenttree/segmenttree.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">SegTree</h3>
+        <p class="blurb">iterative point-update range-query, generic op</p>
+        <code class="hint">st.update(i,val); st.query(l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/SegmentTree.cpp" target="_blank" rel="noopener">SegmentTree.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="lazysegtree range-update range-query, generic op segmenttree/lazysegmenttree.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">LazySegTree</h3>
+        <p class="blurb">range-update range-query, generic op</p>
+        <code class="hint">st.Add(l,r,v); st.Sum(l,r); st.Min(l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/LazySegmentTree.cpp" target="_blank" rel="noopener">LazySegmentTree.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="persistentsegtree versioned segment tree, old versions stay queryable segmenttree/persistentsegmenttree.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-03</span>
+          <span class="prov">ed. standard</span>
+        </div>
+        <h3 class="trigger">PersistentSegTree</h3>
+        <p class="blurb">versioned segment tree, old versions stay queryable</p>
+        <code class="hint">int v2 = pst.update(0, idx, val); pst.query(v2,l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n) / version</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/PersistentSegmentTree.cpp" target="_blank" rel="noopener">PersistentSegmentTree.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="mergesorttree count-less-than / order-stat range queries, static segmenttree/mergesorttree.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-04</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">MergeSortTree</h3>
+        <p class="blurb">count-less-than / order-stat range queries, static</p>
+        <code class="hint">mst.countLess(l,r,x); mst.predecessor(l,r,x);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log^2 n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/MergeSortTree.cpp" target="_blank" rel="noopener">MergeSortTree.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="maxsubarrayseg max-subarray-sum segment tree, point-set segmenttree/dynamicsubarraysum.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-05</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">MaxSubarraySeg</h3>
+        <p class="blurb">max-subarray-sum segment tree, point-set</p>
+        <code class="hint">st.modify(pos,val); st.query(l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/DynamicSubarraySum.cpp" target="_blank" rel="noopener">DynamicSubarraySum.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="rangetogglesum range xor-toggle on a binary array + range sum segmenttree/rangetogglesum.cpp">
+        <div class="card-top">
+          <span class="callnum">SG-06</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">RangeToggleSum</h3>
+        <p class="blurb">range XOR-toggle on a binary array + range sum</p>
+        <code class="hint">st.toggle(l,r); st.query(l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/RangeToggleSum.cpp" target="_blank" rel="noopener">RangeToggleSum.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-FN" open>
+      <summary class="tab">
+        <span class="tab-code">FN</span>
+        <span class="tab-name">Fenwick trees</span>
+        <span class="tab-folder">FenwickTree/</span>
+        <span class="tab-count">4 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="fenwick point-update range-sum bit + binary search fenwicktree/fenwicktree.cpp">
+        <div class="card-top">
+          <span class="callnum">FN-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">Fenwick</h3>
+        <p class="blurb">point-update range-sum BIT + binary search</p>
+        <code class="hint">f.update(idx,val); f.query(l,r); f.lower_bound(val);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickTree.cpp" target="_blank" rel="noopener">FenwickTree.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="fenwickrupq range-update point-query bit fenwicktree/fenwickrangeupdatepointquery.cpp">
+        <div class="card-top">
+          <span class="callnum">FN-02</span>
+          <span class="prov">ed. standard</span>
+        </div>
+        <h3 class="trigger">FenwickRUPQ</h3>
+        <p class="blurb">range-update point-query BIT</p>
+        <code class="hint">f.update(l,r,val); f.query(idx);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickRangeUpdatePointQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdatePointQuery.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="fenwickrurq range-update range-query bit, two-bit trick fenwicktree/fenwickrangeupdaterangequery.cpp">
+        <div class="card-top">
+          <span class="callnum">FN-03</span>
+          <span class="prov">ed. standard</span>
+        </div>
+        <h3 class="trigger">FenwickRURQ</h3>
+        <p class="blurb">range-update range-query BIT, two-BIT trick</p>
+        <code class="hint">f.update(l,r,val); f.query(l,r);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickRangeUpdateRangeQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdateRangeQuery.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="fenwick2d 2d point-update rectangle-sum-query fenwicktree/fenwick2d.cpp">
+        <div class="card-top">
+          <span class="callnum">FN-04</span>
+          <span class="prov">ed. standard</span>
+        </div>
+        <h3 class="trigger">Fenwick2D</h3>
+        <p class="blurb">2D point-update rectangle-sum-query</p>
+        <code class="hint">f.update(x,y,val); f.query(x1,y1,x2,y2);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n log m)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/Fenwick2D.cpp" target="_blank" rel="noopener">Fenwick2D.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-RM" open>
+      <summary class="tab">
+        <span class="tab-code">RM</span>
+        <span class="tab-name">RMQ</span>
+        <span class="tab-folder">RMQ/</span>
+        <span class="tab-count">2 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="sparsetable o(1) rmq, generic idempotent op (min/max/gcd) rmq/sparsetable.cpp">
+        <div class="card-top">
+          <span class="callnum">RM-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">SparseTable</h3>
+        <p class="blurb">O(1) RMQ, generic idempotent op (min/max/gcd)</p>
+        <code class="hint">st.query(l,r);  // NOT sum -- not idempotent</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1) query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/RMQ/SparseTable.cpp" target="_blank" rel="noopener">SparseTable.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="rmq2d 2d range min/max query rmq/rmq2d.cpp">
+        <div class="card-top">
+          <span class="callnum">RM-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">RMQ2D</h3>
+        <p class="blurb">2D range min/max query</p>
+        <code class="hint">st.query(x1,y1,x2,y2);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1) query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/RMQ/RMQ2D.cpp" target="_blank" rel="noopener">RMQ2D.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-DP" open>
+      <summary class="tab">
+        <span class="tab-code">DP</span>
+        <span class="tab-name">DP scaffolds</span>
+        <span class="tab-folder">DP/</span>
+        <span class="tab-count">6 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="digitdp digit-dp skeleton with a worked toy example dp/digitdp.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">DigitDP</h3>
+        <p class="blurb">digit-DP skeleton with a worked toy example</p>
+        <code class="hint">int answer = dp.count();  // count(R)-count(L-1) for ranges</code>
+        <div class="card-bottom">
+          <span class="cplx">O(digits x states)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/DigitDP.cpp" target="_blank" rel="noopener">DigitDP.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="bitmaskdp bitmask-dp skeleton, assignment-problem shape dp/bitmaskdp.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">BitmaskDP</h3>
+        <p class="blurb">bitmask-DP skeleton, assignment-problem shape</p>
+        <code class="hint">int minCost = dp.answer();</code>
+        <div class="card-bottom">
+          <span class="cplx">O(2^n * n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/BitmaskDP.cpp" target="_blank" rel="noopener">BitmaskDP.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="sosdp sum-over-subsets dp dp/sosdp.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-03</span>
+          <span class="prov">ed. cp-algorithms</span>
+        </div>
+        <h3 class="trigger">SOSDP</h3>
+        <p class="blurb">sum-over-subsets DP</p>
+        <code class="hint">vector&lt;int&gt; g = sos(f);  // g[mask] = sum over submasks</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n * 2^n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/SOSDP.cpp" target="_blank" rel="noopener">SOSDP.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="dncopt divide-and-conquer dp optimization dp/divideandconqueropt.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-04</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">DnCOpt</h3>
+        <p class="blurb">divide-and-conquer DP optimization</p>
+        <code class="hint">solveDnC(cur, prev, 1, n, 0, n-1, cost);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n log n) amortized</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/DivideAndConquerOpt.cpp" target="_blank" rel="noopener">DivideAndConquerOpt.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="knuthopt knuth&#x27;s dp optimization, quadrangle inequality dp/knuthopt.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-05</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">KnuthOpt</h3>
+        <p class="blurb">Knuth&#x27;s DP optimization, quadrangle inequality</p>
+        <code class="hint">KnuthOpt opt(n, cost); int best = opt.answer();</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n^2)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/KnuthOpt.cpp" target="_blank" rel="noopener">KnuthOpt.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="cht convex hull trick, max/min line envelope dp/convexhulltrick.cpp">
+        <div class="card-top">
+          <span class="callnum">DP-06</span>
+          <span class="prov">ed. KACTL</span>
+        </div>
+        <h3 class="trigger">CHT</h3>
+        <p class="blurb">convex hull trick, max/min line envelope</p>
+        <code class="hint">lc.add(k,m); lc.query(x);  // negate both for MIN</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n) query</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/ConvexHullTrick.cpp" target="_blank" rel="noopener">ConvexHullTrick.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+
+<details class="drawer" id="drawer-MC" open>
+      <summary class="tab">
+        <span class="tab-code">MC</span>
+        <span class="tab-name">Misc</span>
+        <span class="tab-folder">Others/</span>
+        <span class="tab-count">3 cards</span>
+      </summary>
+      <div class="cards">
+      <article class="card" data-search="minstack stack with running minimum others/minstack.cpp">
+        <div class="card-top">
+          <span class="callnum">MC-01</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">MinStack</h3>
+        <p class="blurb">stack with running minimum</p>
+        <code class="hint">ms.push(5); ms.getMin();</code>
+        <div class="card-bottom">
+          <span class="cplx">O(1)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/MinStack.cpp" target="_blank" rel="noopener">MinStack.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="prefixsuffixmex prefix/suffix mex of an array others/prefixsuffixmex.cpp">
+        <div class="card-top">
+          <span class="callnum">MC-02</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">PrefixSuffixMex</h3>
+        <p class="blurb">prefix/suffix mex of an array</p>
+        <code class="hint">auto [preMex, sufMex] = prefixSuffixMex(arr);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/PrefixSuffixMex.cpp" target="_blank" rel="noopener">PrefixSuffixMex.cpp &#8594;</a>
+        </div>
+      </article>
+      <article class="card" data-search="ternarysearch ternary search on a unimodal integer function others/ternarysearch.cpp">
+        <div class="card-top">
+          <span class="callnum">MC-03</span>
+          <span class="prov">ed. house</span>
+        </div>
+        <h3 class="trigger">TernarySearch</h3>
+        <p class="blurb">ternary search on a unimodal integer function</p>
+        <code class="hint">int x = ternarySearchMin(lo, hi, f);</code>
+        <div class="card-bottom">
+          <span class="cplx">O(log n)</span>
+          <a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/TernarySearch.cpp" target="_blank" rel="noopener">TernarySearch.cpp &#8594;</a>
+        </div>
+      </article>
+      </div>
+    </details>
+    <p class="no-results" id="noResults">No card matches &ldquo;<span id="noResultsQuery"></span>&rdquo;.</p>
+  </main>
+
+  <section class="key">
+    <div class="key-row">
+      <span><b>BASE</b> Templete/</span>
+      <span><b>GR</b> Graphs/</span>
+      <span><b>TR</b> Trees/</span>
+      <span><b>ST</b> Strings/</span>
+      <span><b>MA</b> Maths/</span>
+      <span><b>SG</b> SegmentTree/</span>
+      <span><b>FN</b> FenwickTree/</span>
+      <span><b>RM</b> RMQ/</span>
+      <span><b>DP</b> DP/</span>
+      <span><b>MC</b> Others/</span>
+    </div>
+    <p style="margin:10px 0 0">Call number = drawer code + sequence. <span class="mono">ed.</span> is provenance: <span class="mono">KACTL</span>, <span class="mono">cp-algorithms</span>, <span class="mono">standard</span> (textbook idiom) or <span class="mono">house</span> (written or rebuilt for this repo, bugs found here fixed here).</p>
+  </section>
+
+  <footer>
+    <span>md_nihal &middot; struct-encapsulated, brute-force tested, pasted with UltiSnips</span>
+    <a href="https://github.com/mdnihal5/competitive-programming" target="_blank" rel="noopener">github.com/mdnihal5/competitive-programming</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var toggle = document.getElementById('themeToggle');
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem('cp-catalogue-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  toggle.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : (current === 'light' ? null : (matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+    if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
+    try { localStorage.setItem('cp-catalogue-theme', next || ''); } catch (e) {}
+  });
+})();
+
+(function () {
+  var input = document.getElementById('search');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var drawers = Array.prototype.slice.call(document.querySelectorAll('.drawer'));
+  var noResults = document.getElementById('noResults');
+  var noResultsQuery = document.getElementById('noResultsQuery');
+
+  function filter() {
+    var q = input.value.trim().toLowerCase();
+    var anyVisible = false;
+    drawers.forEach(function (d) {
+      var visibleInDrawer = 0;
+      d.querySelectorAll('.card').forEach(function (c) {
+        var match = !q || c.dataset.search.indexOf(q) !== -1;
+        c.classList.toggle('is-hidden', !match);
+        if (match) visibleInDrawer++;
+      });
+      d.classList.toggle('is-empty', visibleInDrawer === 0);
+      if (q) d.open = visibleInDrawer > 0; else d.open = true;
+      if (visibleInDrawer > 0) anyVisible = true;
+    });
+    noResults.classList.toggle('show', q.length > 0 && !anyVisible);
+    noResultsQuery.textContent = input.value.trim();
+  }
+
+  input.addEventListener('input', filter);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      filter();
+      input.blur();
+    }
+  });
+})();
+</script>
+</body>
+</html>
