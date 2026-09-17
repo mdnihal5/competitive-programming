@@ -117,6 +117,29 @@ h1.title .caret {
 .boot-meta a:hover { color: var(--ac); border-bottom-style: solid; }
 .boot-meta .ok { color: var(--ac); }
 
+.install-cmd { margin: 4px 0 16px; }
+.install-label {
+  display: block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--fg-dim); margin-bottom: 5px;
+}
+.install-row {
+  display: flex; align-items: stretch; gap: 0; max-width: 74ch;
+  border: 1px solid var(--rule); background: var(--bg-alt);
+}
+.install-row code {
+  flex: 1; min-width: 0; padding: 9px 12px; font-family: "JetBrains Mono", monospace;
+  font-size: 12px; color: var(--ac); background: transparent; overflow-x: auto;
+  white-space: pre; scrollbar-width: thin;
+}
+.install-row code::before { content: "$ "; color: var(--fg-dim); }
+.copy-btn {
+  flex-shrink: 0; border: none; border-left: 1px solid var(--rule); background: var(--bg-hi);
+  color: var(--fg-dim); font-family: "IBM Plex Mono", monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .04em; padding: 0 14px; cursor: pointer;
+}
+.copy-btn:hover { color: var(--fg); }
+.copy-btn.copied { color: var(--ac); }
+
 /* ---------- two terminal blocks ---------- */
 .term-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 0; }
 @media (max-width: 820px) { .term-pair { grid-template-columns: 1fr; } }
@@ -268,6 +291,13 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
     <p class="prompt"><span class="user">nihal@cp</span>:<span class="path">~/competitive-programming</span>$ cat index</p>
     <h1 class="title">Template Catalogue<span class="caret"></span></h1>
     <p class="boot-sub">48 pasteable C++ templates, indexed the way a contest actually finds them &mdash; by trigger, not by scrolling. Every entry is a struct with a test attached, not a snippet that happens to work once.</p>
+    <div class="install-cmd">
+      <span class="install-label">setup on a new machine, one command</span>
+      <div class="install-row">
+        <code id="installCmd">bash -c "$(curl -fsSL https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/install.sh)"</code>
+        <button class="copy-btn" id="copyInstall" type="button">copy</button>
+      </div>
+    </div>
     <div class="boot-meta">
       <span class="ok">&#10003; 48 entries / 10 panes</span>
       <a href="https://github.com/mdnihal5/competitive-programming" target="_blank" rel="noopener">source</a>
@@ -996,6 +1026,30 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
     if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
     try { localStorage.setItem('cp-cat-theme', next || ''); } catch (e) {}
     paintLabel();
+  });
+})();
+
+(function () {
+  var btn = document.getElementById('copyInstall');
+  var cmd = document.getElementById('installCmd');
+  if (!btn || !cmd) return;
+  btn.addEventListener('click', function () {
+    var text = cmd.textContent;
+    var done = function () {
+      btn.textContent = 'copied';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, done);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      done();
+    }
   });
 })();
 
