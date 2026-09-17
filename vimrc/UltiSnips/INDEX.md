@@ -29,19 +29,34 @@ whatever this file currently says.
 
 Not a snippet — a Vim completion function (`vimrc/vimrc`, `CPTemplateComplete`),
 because an interactive prompt inside an UltiSnips `!p` block turned out to
-re-fire on every later keystroke (tried it, broke it, removed it). Type a few
-letters of what you're after, then `<C-x><C-u>` (Vim's own "run my custom
-completion" — already wired up, no extra mapping needed). It matches
-substring, case-insensitive, against trigger + description + category, read
-live from this file. Arrow keys or `<C-n>`/`<C-p>` to browse, `<CR>` to accept
-— the real trigger name lands at the cursor, same as if you'd typed it. Then
-hit Tab, same as always, to actually expand it.
+re-fire on every later keystroke (tried it, broke it, removed it). **Type
+your substring first**, then `<C-x><C-u>` (Vim's own "run my custom
+completion") or `<C-Space>`/`Ctrl-Space` as a friendlier alias for the same
+thing — insert mode only, and Ctrl-Space's terminal support varies, so
+`<C-x><C-u>` is the one guaranteed to work everywhere. It matches substring,
+case-insensitive, against trigger + description + category, read live from
+this file. Arrow keys or `<C-n>`/`<C-p>` to browse, `<CR>` to accept — the
+real trigger name lands at the cursor, same as if you'd typed it. Then hit
+Tab, same as always, to actually expand it.
 
 ```
-i, then:  segt<C-x><C-u>        -> popup: SegTree / LazySegTree / PersistentSegTree
+i, then:  segt<C-Space>         -> popup: SegTree / LazySegTree / PersistentSegTree
           <C-n><CR>             -> "LazySegTree" at cursor
           <Tab>                 -> the real template
 ```
+
+Type the query *before* invoking, not after: Vim computes candidates once,
+at the moment you invoke, and does not re-run this function per keystroke
+the way a real autocomplete widget would. Invoking with nothing typed yet
+fetches everything and auto-fills the first result; typing more after that
+doesn't refilter, it just falls out of the popup as literal text. Not a bug
+to work around here — a real fix would mean writing a small autocomplete
+engine, out of scope for a snippet library.
+
+Deliberately not bound to `<C-i>`: in a terminal, `<C-i>` and `<Tab>` send
+the identical byte (`0x09` — ASCII, true in every terminal, not a Vim
+quirk), so they can't be two different keys, and `<Tab>` is UltiSnips' own
+expand trigger.
 
 ## Templates & data structures
 

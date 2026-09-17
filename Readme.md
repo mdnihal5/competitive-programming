@@ -71,12 +71,14 @@ trigger + description as a comment block, right there in the file. It reads
 `INDEX.md` at expansion time (same trick `normal` uses to resolve `debug.hpp`),
 so it's never a stale copy of the index above it.
 
-Only remember roughly what you want, not the exact name? Type a few letters,
-then `<C-x><C-u>` — Vim's own completion, pointed at a custom function in
-`vimrc/vimrc` that substring-matches (case-insensitive) against every trigger,
-description and category in `INDEX.md`. Pick one, `<CR>` drops the real
-trigger name at the cursor, then Tab expands it as usual. See `INDEX.md`'s
-Meta section for the walkthrough.
+Only remember roughly what you want, not the exact name? Type the substring
+*first*, then `<C-x><C-u>` (or `<C-Space>` as a friendlier alias, insert
+mode only) — Vim's own completion, pointed at a custom function in
+`vimrc/vimrc` that substring-matches (case-insensitive) against every
+trigger, description and category in `INDEX.md`. Pick one, `<CR>` drops the
+real trigger name at the cursor, then Tab expands it as usual. See
+`INDEX.md`'s Meta section for the walkthrough and why the query has to come
+before invoking, not after.
 
 ## Testing
 

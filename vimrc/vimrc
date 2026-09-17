@@ -239,7 +239,32 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " snippet's tabstop is still active, so the prompt kept reopening and
 " swallowing unrelated keystrokes. This sidesteps that by using Vim's own
 " completion mechanism instead of UltiSnips for the search step.
+"
+" 'popup' here matters: without it, any candidate with extra info (ours all
+" have a description) makes Vim open a real split window ("[Scratch]
+" [Preview]") to show it, which eats half the screen. 'popup' shows that
+" info in a floating popup instead, closer to a normal dropdown.
+"
+" Ctrl-Space is a friendlier alias for Ctrl-X Ctrl-U, insert mode only
+" (never removed the original -- Ctrl-Space's terminal support varies; if
+" it doesn't fire for you, Ctrl-X Ctrl-U always will). Type the substring
+" BEFORE invoking, not after: Vim computes candidates once, at invocation --
+" it does not re-run this function on every later keystroke the way a real
+" autocomplete widget would. Typing more after the popup is open only does
+" plain prefix-continuation against the already-fetched list, so an empty
+" query fetches everything, auto-fills the first result, and further typing
+" just falls out of the popup and gets inserted as literal text (tried a
+" Normal-mode "open blank, then type" binding on exactly this assumption --
+" it produced "listkmp" instead of filtering, so it's not here).
+" NOT bound to Ctrl-I: in a terminal, Ctrl-I and Tab send the exact same
+" byte (0x09, ASCII definition, not a Vim quirk) -- they cannot be two
+" different keys here, and Tab is UltiSnips' own expand trigger, so mapping
+" search to Ctrl-I would silently break every snippet.
 "------------------------------------------------------------------------------
+set completeopt=menuone,popup
+inoremap <C-Space> <C-x><C-u>
+inoremap <Nul> <C-x><C-u>
+
 function! CPTemplateComplete(findstart, base)
   if a:findstart
     let l:line = getline('.')
