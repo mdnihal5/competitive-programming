@@ -45,7 +45,7 @@ endsnippet
 snippet list "Print every available trigger + description (read live from INDEX.md)"
 `!p
 import re, os
-bt = chr(96)  # UltiSnips ends a `!p` block at the next literal backtick -- can't write one directly here
+bt = chr(96)  # UltiSnips ends a !p block at the next literal backtick char -- cannot write one directly here
 idx = os.path.expanduser('~/Personal/competitive-programming/vimrc/UltiSnips/INDEX.md')
 out = ['/*', ' * Available templates -- trigger : description (INDEX.md has full usage)']
 try:

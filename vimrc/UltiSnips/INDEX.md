@@ -25,6 +25,24 @@ time and formats every `## category` / `### \`trigger\` — description` pair as
 a comment block — there's nothing to keep in sync separately, it's always
 whatever this file currently says.
 
+### Search: know roughly what you want but not the exact name
+
+Not a snippet — a Vim completion function (`vimrc/vimrc`, `CPTemplateComplete`),
+because an interactive prompt inside an UltiSnips `!p` block turned out to
+re-fire on every later keystroke (tried it, broke it, removed it). Type a few
+letters of what you're after, then `<C-x><C-u>` (Vim's own "run my custom
+completion" — already wired up, no extra mapping needed). It matches
+substring, case-insensitive, against trigger + description + category, read
+live from this file. Arrow keys or `<C-n>`/`<C-p>` to browse, `<CR>` to accept
+— the real trigger name lands at the cursor, same as if you'd typed it. Then
+hit Tab, same as always, to actually expand it.
+
+```
+i, then:  segt<C-x><C-u>        -> popup: SegTree / LazySegTree / PersistentSegTree
+          <C-n><CR>             -> "LazySegTree" at cursor
+          <Tab>                 -> the real template
+```
+
 ## Templates & data structures
 
 ### `PBDS` — ordered_set / ordered_map (order statistics)

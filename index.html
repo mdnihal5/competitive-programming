@@ -228,10 +228,12 @@ footer a { color: var(--info); text-decoration: none; border-bottom: 1px dotted 
 footer a:hover { color: var(--ac); border-bottom-style: solid; }
 
 .theme-toggle {
-  flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
+  position: fixed; right: 18px; bottom: 18px; z-index: 20;
+  display: flex; align-items: center; gap: 7px;
   font-family: "IBM Plex Mono", monospace; font-size: 11.5px; font-weight: 600;
   background: var(--bg-hi); border: 1px solid var(--rule); color: var(--fg);
-  padding: 5px 10px; cursor: pointer;
+  padding: 7px 12px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .28);
 }
 .theme-toggle:hover { border-color: var(--ac); color: var(--ac); }
 .theme-toggle .tt-dot {
@@ -246,8 +248,8 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
   body { font-size: 13.5px; }
   .tbl { font-size: 12px; }
   .cmdline .hint { display: none; }
+  .theme-toggle { right: 12px; bottom: 12px; padding: 10px 12px; }
   .theme-toggle .tt-label { display: none; }
-  .theme-toggle { padding: 10px 12px; }
   .theme-toggle .tt-dot { width: 10px; height: 10px; }
 }
 </style>
@@ -315,9 +317,6 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
       <span class="colon">:</span>
       <input type="text" id="search" placeholder="search  /trigger  /keyword  /complexity" aria-label="Search templates">
       <span class="hint">press <kbd>/</kbd> to focus &middot; <kbd>esc</kbd> to clear</span>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="toggle light/dark theme">
-        <span class="tt-dot" aria-hidden="true"></span><span class="tt-label" id="themeToggleLabel">:set bg=~</span>
-      </button>
     </div>
     <nav class="rail" aria-label="Category index">
       <a href="#pane-BASE" class="rail-tab cat-0"><b>0</b>Base</a>
@@ -333,6 +332,10 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
       <a href="#pane-SETUP" class="rail-tab rail-tab-setup"><b>S</b>Setup</a>
     </nav>
   </div>
+
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="toggle light/dark theme">
+    <span class="tt-dot" aria-hidden="true"></span><span class="tt-label" id="themeToggleLabel">:set bg=~</span>
+  </button>
 
   <main>
 <section class="pane cat-0" id="pane-BASE">

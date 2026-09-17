@@ -226,9 +226,63 @@ let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips']
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
+"------------------------------------------------------------------------------
+" Forgot the exact trigger name? Type a few letters of what you're looking
+" for, then Ctrl-X Ctrl-U (Vim's built-in "run my custom completion function"
+" -- no extra mapping needed, it's already wired to &completefunc below).
+" Matches substring, case-insensitive, against trigger + description +
+" category in vimrc/UltiSnips/INDEX.md. Arrow/Ctrl-N through the popup, <CR>
+" accepts one -- the trigger name lands at the cursor, same as if you'd typed
+" it -- then Tab expands it as usual. Deliberately NOT an UltiSnips snippet:
+" an earlier version tried an interactive input() inside a `!p` block, but
+" UltiSnips re-evaluates `!p` code on every later buffer change while the
+" snippet's tabstop is still active, so the prompt kept reopening and
+" swallowing unrelated keystrokes. This sidesteps that by using Vim's own
+" completion mechanism instead of UltiSnips for the search step.
+"------------------------------------------------------------------------------
+function! CPTemplateComplete(findstart, base)
+  if a:findstart
+    let l:line = getline('.')
+    let l:start = col('.') - 1
+    while l:start > 0 && l:line[l:start - 1] =~# '\S'
+      let l:start -= 1
+    endwhile
+    return l:start
+  endif
+
+  let l:idx = expand('~/Personal/competitive-programming/vimrc/UltiSnips/INDEX.md')
+  if !filereadable(l:idx)
+    return []
+  endif
+
+  let l:query = tolower(a:base)
+  let l:cat = ''
+  let l:results = []
+  for l:raw in readfile(l:idx)
+    let l:mcat = matchlist(l:raw, '^## \(.*\)$')
+    if !empty(l:mcat)
+      let l:cat = l:mcat[1]
+      continue
+    endif
+    let l:mtrig = matchlist(l:raw, '^### `\([^`]\+\)`\s*—\s*\(.*\)$')
+    if empty(l:mtrig)
+      continue
+    endif
+    let l:trig = l:mtrig[1]
+    let l:desc = l:mtrig[2]
+    if l:query ==# '' || stridx(tolower(l:trig), l:query) >= 0
+      \ || stridx(tolower(l:desc), l:query) >= 0
+      \ || stridx(tolower(l:cat), l:query) >= 0
+      call add(l:results, {'word': l:trig, 'menu': l:cat, 'info': l:desc, 'abbr': l:trig})
+    endif
+  endfor
+  return l:results
+endfunction
+
 autocmd BufWritePre *.cpp,*.cc,*.hpp,*.h,*.c silent! call Format()
 
 augroup cpp_files
   autocmd!
   autocmd BufNewFile,BufRead *.cpp,*.cc,*.cxx,*.hpp,*.h setlocal filetype=cpp
+  autocmd FileType cpp,c,cc setlocal completefunc=CPTemplateComplete
 augroup END
