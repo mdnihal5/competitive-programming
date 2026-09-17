@@ -12,6 +12,20 @@ with zero global state (two structs with different names never collide; two
 files with global `int n; vector<int> adj;` do), and every template has a real
 test, not just an example that happens to work.
 
+## Setup on a new machine
+
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/install.sh)"
+```
+
+Clones this repo to `~/Personal/competitive-programming` (the path the
+snippets themselves resolve against), installs g++/astyle/a `+python3` Vim/a
+clipboard tool via apt or Homebrew, bootstraps vim-plug, and **symlinks**
+(not copies) `~/.vimrc` and `~/.vim/UltiSnips` at this repo's copies — so the
+live config and the repo can never drift apart. Anything already at those
+paths is backed up, never overwritten. Safe to re-run. `CP_SETUP_DRY_RUN=1`
+previews every step without changing anything.
+
 ## Layout
 
 ```
