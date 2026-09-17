@@ -140,6 +140,8 @@ h1.title .caret {
 .tree { display: flex; flex-direction: column; font-size: 12.8px; overflow-x: auto; }
 .tl { white-space: nowrap; padding: 2px 0; }
 .tl b { color: var(--info); }
+.tl a { text-decoration: none; border-bottom: 1px dotted var(--info); }
+.tl a:hover { border-bottom-style: solid; }
 .tl i { color: var(--fg-dim); font-style: normal; }
 
 /* ---------- rail + search ---------- */
@@ -147,7 +149,7 @@ h1.title .caret {
 .cmdline { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--rule); }
 .cmdline .colon { color: var(--ac); font-weight: 700; }
 .cmdline input {
-  flex: 1; background: transparent; border: none; color: var(--fg);
+  flex: 1; min-width: 0; background: transparent; border: none; color: var(--fg);
   font-family: "JetBrains Mono", monospace; font-size: 13.5px; padding: 3px 0;
 }
 .cmdline input:focus { outline: none; }
@@ -162,10 +164,14 @@ kbd { border: 1px solid var(--rule); padding: 0 4px; font-size: 10.5px; backgrou
 }
 .rail-tab b { color: var(--cat); font-family: "IBM Plex Mono", monospace; }
 .rail-tab:hover { color: var(--fg); border-bottom-color: var(--cat); }
+.rail-tab-setup b { color: var(--info); }
+.rail-tab-setup:hover { border-bottom-color: var(--info); }
 
 /* ---------- panes ---------- */
 main { padding: 22px 0 60px; }
 .pane { margin-bottom: 26px; border-left: 3px solid var(--cat); }
+.pane-setup { border-left-color: var(--info); margin-top: 26px; }
+.pane-setup .pane-code { color: var(--info); }
 .pane-head {
   display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
   padding: 6px 0 6px 12px; margin-bottom: 4px;
@@ -222,10 +228,16 @@ footer a { color: var(--info); text-decoration: none; border-bottom: 1px dotted 
 footer a:hover { color: var(--ac); border-bottom-style: solid; }
 
 .theme-toggle {
-  font-family: "IBM Plex Mono", monospace; font-size: 11px; background: transparent;
-  border: 1px solid var(--rule); color: var(--fg); padding: 4px 9px; cursor: pointer;
+  flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
+  font-family: "IBM Plex Mono", monospace; font-size: 11.5px; font-weight: 600;
+  background: var(--bg-hi); border: 1px solid var(--rule); color: var(--fg);
+  padding: 5px 10px; cursor: pointer;
 }
-.theme-toggle:hover { border-color: var(--fg); }
+.theme-toggle:hover { border-color: var(--ac); color: var(--ac); }
+.theme-toggle .tt-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--ac);
+  box-shadow: 0 0 0 2px var(--bg-hi), 0 0 0 3px var(--rule);
+}
 
 @media print {
   .statusline, .rail-outer, .theme-toggle { display: none !important; }
@@ -233,6 +245,10 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
 @media (max-width: 480px) {
   body { font-size: 13.5px; }
   .tbl { font-size: 12px; }
+  .cmdline .hint { display: none; }
+  .theme-toggle .tt-label { display: none; }
+  .theme-toggle { padding: 10px 12px; }
+  .theme-toggle .tt-dot { width: 10px; height: 10px; }
 }
 </style>
 </head>
@@ -255,7 +271,6 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
       <a href="https://github.com/mdnihal5/competitive-programming" target="_blank" rel="noopener">source</a>
       <a href="https://github.com/mdnihal5/competitive-programming/blob/main/Readme.md" target="_blank" rel="noopener">readme</a>
       <a href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/UltiSnips/INDEX.md" target="_blank" rel="noopener">snippet index</a>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="toggle light/dark">:set bg=~</button>
     </div>
   </header>
 
@@ -266,6 +281,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
         <ol>
           <li>Open a <code class="arg">.cpp</code> file, type <code class="kw">normal</code>, hit Tab &mdash; the base template.</li>
           <li>Type any trigger from a pane below (e.g. <code class="kw">DSU</code>, <code class="kw">SegTree</code>) and Tab again.</li>
+          <li>Forgot a trigger? Type <code class="kw">list</code>, hit Tab &mdash; prints every trigger + description as a comment, read live from <code class="arg">INDEX.md</code>.</li>
           <li>No snippets? Open the file here, copy between <code class="arg">SNIPPET START</code> / <code class="arg">END</code>.</li>
           <li>Run <code class="kw">tests/run_all.sh</code> &mdash; compiles + runs every template's own stress test.</li>
         </ol>
@@ -287,7 +303,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
         <span class="tl">&#9500;&#9472;&#9472; <b>RMQ/</b> <i># O(1)-query sparse tables, 1D and 2D</i></span>
         <span class="tl">&#9500;&#9472;&#9472; <b>DP/</b> <i># scaffolds and classic transition optimizations</i></span>
         <span class="tl">&#9500;&#9472;&#9472; <b>Others/</b> <i># 3 catalogued + 4 uncatalogued (smoke-tested only)</i></span>
-        <span class="tl">&#9500;&#9472;&#9472; <b>vimrc/</b> <i># .vimrc, cpp.snippets, INDEX.md, bash_aliases -- what this catalogue mirrors</i></span>
+        <span class="tl">&#9500;&#9472;&#9472; <a href="#pane-SETUP"><b>vimrc/</b></a> <i># .vimrc, cpp.snippets, INDEX.md, bash_aliases -- see the Setup pane below</i></span>
         <span class="tl">&#9492;&#9472;&#9472; <b>tests/</b> <i># run_all.sh -- compiles + runs every LOCAL_TEST block</i></span>
         </div>
       </div>
@@ -299,6 +315,9 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
       <span class="colon">:</span>
       <input type="text" id="search" placeholder="search  /trigger  /keyword  /complexity" aria-label="Search templates">
       <span class="hint">press <kbd>/</kbd> to focus &middot; <kbd>esc</kbd> to clear</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="toggle light/dark theme">
+        <span class="tt-dot" aria-hidden="true"></span><span class="tt-label" id="themeToggleLabel">:set bg=~</span>
+      </button>
     </div>
     <nav class="rail" aria-label="Category index">
       <a href="#pane-BASE" class="rail-tab cat-0"><b>0</b>Base</a>
@@ -311,6 +330,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
       <a href="#pane-RM" class="rail-tab cat-7"><b>7</b>RMQ</a>
       <a href="#pane-DP" class="rail-tab cat-8"><b>8</b>DP scaffolds</a>
       <a href="#pane-MC" class="rail-tab cat-9"><b>9</b>Misc</a>
+      <a href="#pane-SETUP" class="rail-tab rail-tab-setup"><b>S</b>Setup</a>
     </nav>
   </div>
 
@@ -901,6 +921,46 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
     <p class="no-results" id="noResults">-- no match for &ldquo;<span id="nrq"></span>&rdquo; --</p>
   </main>
 
+  <section class="pane pane-setup" id="pane-SETUP">
+    <div class="pane-head">
+      <span class="pane-num">&mdash;</span>
+      <span class="pane-code">SETUP</span>
+      <h2 class="pane-name">vimrc/</h2>
+      <span class="pane-folder">vimrc/</span>
+      <span class="pane-desc">not a template &mdash; the Vim/UltiSnips setup this whole catalogue mirrors</span>
+      <span class="pane-count">4</span>
+    </div>
+    <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>file</th><th>what it does</th><th class="th-r">file</th></tr>
+      </thead>
+      <tbody>
+        <tr class="row" data-search="vimrc vim config compiler resolution clipboard f7 compile run vimrc/vimrc setup">
+          <td class="c-trig">.vimrc</td>
+          <td class="c-blurb">the actual Vim config &mdash; cross-platform compiler resolution (<code>g++</code> on Linux, newest Homebrew <code>g++-N</code> on macOS), clipboard + <kbd>F7</kbd> compile/run mappings.<code class="c-hint">brew install gcc astyle   # one-time, macOS only</code></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/vimrc" target="_blank" rel="noopener">vimrc/vimrc</a></td>
+        </tr>
+        <tr class="row" data-search="cpp.snippets snippets ultisnips triggers normal list vimrc/ultisnips/cpp.snippets setup">
+          <td class="c-trig">cpp.snippets</td>
+          <td class="c-blurb">every template below, as an UltiSnips trigger. No comments by design &mdash; fast to read mid-contest.<code class="c-hint">normal&lt;Tab&gt;  DSU&lt;Tab&gt;  list&lt;Tab&gt;</code></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/UltiSnips/cpp.snippets" target="_blank" rel="noopener">UltiSnips/cpp.snippets</a></td>
+        </tr>
+        <tr class="row" data-search="index.md index lookup triggers descriptions usage list vimrc/ultisnips/index.md setup">
+          <td class="c-trig">INDEX.md</td>
+          <td class="c-blurb">the human-readable lookup this whole page is generated from &mdash; every trigger, description and usage example. <code>list&lt;Tab&gt;</code> reads it live.<code class="c-hint">source of truth -- keep it updated when a snippet changes</code></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/UltiSnips/INDEX.md" target="_blank" rel="noopener">UltiSnips/INDEX.md</a></td>
+        </tr>
+        <tr class="row" data-search="bash_aliases cstart contest launcher input.txt output.txt vimrc/bash_aliases setup">
+          <td class="c-trig">bash_aliases</td>
+          <td class="c-blurb"><code>cstart [dir] name...</code> &mdash; creates <code>input.txt</code>/<code>output.txt</code> + empty <code>.cpp</code> under <code>$CSTART_DIR</code>, opens it in Vim.<code class="c-hint">cstart abcd a,b,c   # contest abcd, opens a.cpp</code></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/vimrc/bash_aliases" target="_blank" rel="noopener">bash_aliases</a></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
   <section class="key">
     <span><b>cx</b> = typical complexity.</span>
     <span><b>src</b> = provenance &mdash; <span class="tag tag-KACTL">KACTL</span> <span class="tag tag-cp-algo">cp-algo</span> <span class="tag tag-standard">standard</span> textbook idiom, or <span class="tag tag-house">house</span> written/rebuilt for this repo (bugs found here, fixed here).</span>
@@ -915,14 +975,24 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
 <script>
 (function () {
   var toggle = document.getElementById('themeToggle');
+  var label = document.getElementById('themeToggleLabel');
   var root = document.documentElement;
+
+  function paintLabel() {
+    var cur = root.getAttribute('data-theme');
+    label.textContent = cur ? (':set bg=' + cur) : ':set bg=auto';
+  }
+
   try { var saved = localStorage.getItem('cp-cat-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  paintLabel();
+
   toggle.addEventListener('click', function () {
     var cur = root.getAttribute('data-theme');
     var sysDark = matchMedia('(prefers-color-scheme: dark)').matches;
     var next = cur === 'dark' ? 'light' : (cur === 'light' ? (sysDark ? 'dark' : null) : (sysDark ? 'light' : 'dark'));
     if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
     try { localStorage.setItem('cp-cat-theme', next || ''); } catch (e) {}
+    paintLabel();
   });
 })();
 

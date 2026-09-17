@@ -52,6 +52,11 @@ and a short usage example. `cpp.snippets` itself carries no comments by design
 (fast to read mid-contest); the index is where the explanation lives. **Keep it
 updated** whenever a snippet is added, renamed, or removed.
 
+Forgot a trigger name mid-contest? Type `list`, hit Tab — it prints every
+trigger + description as a comment block, right there in the file. It reads
+`INDEX.md` at expansion time (same trick `normal` uses to resolve `debug.hpp`),
+so it's never a stale copy of the index above it.
+
 ## Testing
 
 Every template has its own correctness test, compiled in via `-DLOCAL_TEST`,

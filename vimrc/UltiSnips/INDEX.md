@@ -8,6 +8,23 @@ itself carries no comments by design.
 `normal` is the base template — every other snippet here is meant to be pasted
 into a file that already has it (they don't redeclare `all`/`ALL`/`int`/`mod`/`N`/etc).
 
+## Meta
+
+### `list` — prints this whole index as a comment, mid-contest
+```cpp
+/*
+ * Available templates -- trigger : description (INDEX.md has full usage)
+ *
+ * Graphs
+ *   Dijkstra             shortest paths, non-negative weights
+ *   ...
+ */
+```
+Forgot a trigger name? Type `list`, hit Tab. It reads this file at expansion
+time and formats every `## category` / `### \`trigger\` — description` pair as
+a comment block — there's nothing to keep in sync separately, it's always
+whatever this file currently says.
+
 ## Templates & data structures
 
 ### `PBDS` — ordered_set / ordered_map (order statistics)

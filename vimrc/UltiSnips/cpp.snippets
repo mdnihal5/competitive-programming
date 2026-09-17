@@ -42,6 +42,29 @@ int32_t main() {
 
 endsnippet
 
+snippet list "Print every available trigger + description (read live from INDEX.md)"
+`!p
+import re, os
+idx = os.path.expanduser('~/Personal/competitive-programming/vimrc/UltiSnips/INDEX.md')
+out = ['/*', ' * Available templates -- trigger : description (INDEX.md has full usage)']
+try:
+    f = open(idx)
+    for raw in f:
+        m_cat = re.match(r'^## (.+)', raw)
+        m_trig = re.match(r'^### `([^`]+)`\s+—\s+(.+)', raw)
+        if m_cat:
+            out.append(' *')
+            out.append(' * ' + m_cat.group(1).strip())
+        elif m_trig:
+            out.append(' *   %-20s %s' % (m_trig.group(1), m_trig.group(2).strip()))
+    f.close()
+except IOError:
+    out.append(' * INDEX.md not found -- expected at ' + idx)
+out.append(' */')
+snip.rv = '\n'.join(out)
+`
+endsnippet
+
 snippet nCr "nCr"
 struct Fact {
     int f[N + 1], inv[N + 1];
