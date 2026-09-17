@@ -1,5 +1,11 @@
 # Competitive programming templates
 
+**Setup on a new machine, one command:**
+
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/install.sh)"
+```
+
 My C++ template library: pasteable, struct-encapsulated implementations of the
 algorithms and data structures that actually come up in Codeforces/CSES/AtCoder
 problems, plus the Vim setup (UltiSnips snippets, `.vimrc`, `cstart`) that pastes
@@ -13,10 +19,6 @@ files with global `int n; vector<int> adj;` do), and every template has a real
 test, not just an example that happens to work.
 
 ## Setup on a new machine
-
-```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/install.sh)"
-```
 
 Clones this repo to `~/Personal/competitive-programming` (the path the
 snippets themselves resolve against), installs g++/astyle/a `+python3` Vim/a
@@ -76,9 +78,10 @@ Only remember roughly what you want, not the exact name? Type the substring
 mode only) — Vim's own completion, pointed at a custom function in
 `vimrc/vimrc` that substring-matches (case-insensitive) against every
 trigger, description and category in `INDEX.md`. Pick one, `<CR>` drops the
-real trigger name at the cursor, then Tab expands it as usual. See
-`INDEX.md`'s Meta section for the walkthrough and why the query has to come
-before invoking, not after.
+real template code at the cursor, correctly re-indented — no Tab needed for
+46 of 48 triggers. See `INDEX.md`'s Meta section for the walkthrough, the
+`list`/`normal` exceptions, and why the query has to come before invoking,
+not after.
 
 ## Testing
 

@@ -261,9 +261,68 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " different keys here, and Tab is UltiSnips' own expand trigger, so mapping
 " search to Ctrl-I would silently break every snippet.
 "------------------------------------------------------------------------------
+" Selecting a match inserts the real template CODE at the cursor, not just
+" the trigger name -- computed by CPInsertBody() below, via CompleteDone.
+" Vim's completion 'word' field can't hold real newlines (verified: passing
+" one inserts a literal NUL byte inline, not a line break), so the actual
+" multi-line body can't travel through 'word' itself. Instead 'word' stays
+" the trigger name (safe, single-line, and what makes the popup readable),
+" and CompleteDone swaps it for the real body via setline()/append() --
+" plain buffer edits, not UltiSnips' own expand engine, which is the part
+" that mattered: an earlier attempt at auto-expanding via UltiSnips itself
+" from CompleteDone failed because UltiSnips' internal state hadn't caught
+" up with Vim's completion machinery yet (proved with a direct, synchronous
+" call that still returned nothing). Plain buffer functions have no such
+" state to lag.
+"
+" Only snippets with a plain body qualify -- 46 of 48 triggers, everything
+" except `list`, which uses UltiSnips' `!p` python interpolation (reads
+" INDEX.md live) and can't be reduced to static text. `list` still lands as
+" just the trigger name, same as before -- Tab still expands it. The
+" popup's menu column says "[Tab]" for that case so it's not a silent
+" difference. `normal` never shows up here at all -- it isn't cataloged in
+" INDEX.md's `### trigger` entries (just mentioned in prose), so it was
+" never searchable through this to begin with. Fine as-is: nobody forgets
+" `normal`, it's the first thing typed in every file.
 set completeopt=menuone,popup
 inoremap <C-Space> <C-x><C-u>
 inoremap <Nul> <C-x><C-u>
+
+function! s:CPSnippetBodies()
+  let l:path = expand('~/Personal/competitive-programming/vimrc/UltiSnips/cpp.snippets')
+  if !filereadable(l:path)
+    return {}
+  endif
+  let l:bodies = {}
+  let l:trig = ''
+  let l:body = []
+  let l:in_snippet = 0
+  let l:has_interp = 0
+  for l:raw in readfile(l:path)
+    let l:mhead = matchlist(l:raw, '^snippet \(\S\+\)')
+    if !empty(l:mhead)
+      let l:trig = l:mhead[1]
+      let l:body = []
+      let l:in_snippet = 1
+      let l:has_interp = 0
+      continue
+    endif
+    if l:raw ==# 'endsnippet'
+      if l:in_snippet && !l:has_interp && !empty(l:body)
+        let l:bodies[l:trig] = l:body
+      endif
+      let l:in_snippet = 0
+      continue
+    endif
+    if l:in_snippet
+      if l:raw =~# '`'
+        let l:has_interp = 1
+      endif
+      call add(l:body, l:raw)
+    endif
+  endfor
+  return l:bodies
+endfunction
 
 function! CPTemplateComplete(findstart, base)
   if a:findstart
@@ -279,6 +338,9 @@ function! CPTemplateComplete(findstart, base)
   if !filereadable(l:idx)
     return []
   endif
+
+  let l:bodies = s:CPSnippetBodies()
+  let s:cp_search_bodies = {}
 
   let l:query = tolower(a:base)
   let l:cat = ''
@@ -298,11 +360,56 @@ function! CPTemplateComplete(findstart, base)
     if l:query ==# '' || stridx(tolower(l:trig), l:query) >= 0
       \ || stridx(tolower(l:desc), l:query) >= 0
       \ || stridx(tolower(l:cat), l:query) >= 0
-      call add(l:results, {'word': l:trig, 'menu': l:cat, 'info': l:desc, 'abbr': l:trig})
+      if has_key(l:bodies, l:trig)
+        let s:cp_search_bodies[l:trig] = l:bodies[l:trig]
+        call add(l:results, {'word': l:trig, 'menu': l:cat, 'info': l:desc, 'abbr': l:trig})
+      else
+        call add(l:results, {'word': l:trig, 'menu': l:cat . '  [Tab]', 'info': l:desc, 'abbr': l:trig})
+      endif
     endif
   endfor
   return l:results
 endfunction
+
+" Fires after any completion is accepted, anywhere -- guarded to only act
+" when it was CPTemplateComplete's own popup and the accepted word is one
+" of the plain-body triggers it flagged in s:cp_search_bodies (see above).
+" Re-indents continuation lines to the current line's own leading
+" whitespace, matching what UltiSnips' Tab-expand already does for
+" multi-line snippets -- otherwise a struct pasted mid-function would come
+" out flush left instead of following the surrounding code.
+function! s:CPInsertBody()
+  if &completefunc !=# 'CPTemplateComplete' | return | endif
+  if empty(v:completed_item) || !exists('s:cp_search_bodies') | return | endif
+  let l:trig = get(v:completed_item, 'word', '')
+  if !has_key(s:cp_search_bodies, l:trig)
+    return
+  endif
+  let l:body = s:cp_search_bodies[l:trig]
+  let l:lnum = line('.')
+  let l:col = col('.')
+  let l:line = getline(l:lnum)
+  let l:indent = matchstr(l:line, '^\s*')
+  let l:start = l:col - len(l:trig) - 1
+  let l:before = l:start > 0 ? l:line[0 : l:start - 1] : ''
+  let l:after = l:line[l:col - 1 :]
+
+  call setline(l:lnum, l:before . l:body[0])
+  if len(l:body) == 1
+    call setline(l:lnum, l:before . l:body[0] . l:after)
+    call cursor(l:lnum, len(l:before . l:body[0]) + 1)
+    return
+  endif
+  call append(l:lnum, map(copy(l:body[1:]), {_, v -> empty(v) ? v : l:indent . v}))
+  let l:last = l:lnum + len(l:body) - 1
+  call setline(l:last, getline(l:last) . l:after)
+  call cursor(l:last, len(getline(l:last)) - len(l:after) + 1)
+endfunction
+
+augroup cp_search_insert
+  autocmd!
+  autocmd CompleteDone * call s:CPInsertBody()
+augroup END
 
 autocmd BufWritePre *.cpp,*.cc,*.hpp,*.h,*.c silent! call Format()
 

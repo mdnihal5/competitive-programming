@@ -35,15 +35,27 @@ completion") or `<C-Space>`/`Ctrl-Space` as a friendlier alias for the same
 thing — insert mode only, and Ctrl-Space's terminal support varies, so
 `<C-x><C-u>` is the one guaranteed to work everywhere. It matches substring,
 case-insensitive, against trigger + description + category, read live from
-this file. Arrow keys or `<C-n>`/`<C-p>` to browse, `<CR>` to accept — the
-real trigger name lands at the cursor, same as if you'd typed it. Then hit
-Tab, same as always, to actually expand it.
+this file. Arrow keys or `<C-n>`/`<C-p>` to browse, `<CR>` to accept — and
+for 46 of the 48 triggers, that's it: the real template CODE lands at the
+cursor, multi-line, correctly re-indented to match wherever you invoked it,
+no Tab needed. (Vim's completion `word` field can't hold real newlines —
+verified, it inserts a literal NUL byte inline instead of a line break — so
+this happens via a `CompleteDone` handler doing plain `setline()`/`append()`
+buffer edits, not through `word` itself.)
 
 ```
 i, then:  segt<C-Space>         -> popup: SegTree / LazySegTree / PersistentSegTree
-          <C-n><CR>             -> "LazySegTree" at cursor
-          <Tab>                 -> the real template
+          <C-n><CR>             -> the real struct SegTree {...} code, right there
 ```
+
+The exception is `list`, which uses UltiSnips' `!p` interpolation (reads
+this file live) and can't be reduced to static text — picking it still just
+drops the word `list` at the cursor, same as before, and needs an actual
+Tab to expand. The popup's menu column says `[Tab]` for that one entry so
+it's not a silent difference. `normal` never appears in this search at all
+— it isn't one of this file's `### trigger` entries, just mentioned in
+prose above, so it was never reachable this way to begin with. That's fine:
+nobody forgets `normal`, it's the first thing typed in every file.
 
 Type the query *before* invoking, not after: Vim computes candidates once,
 at the moment you invoke, and does not re-run this function per keystroke
