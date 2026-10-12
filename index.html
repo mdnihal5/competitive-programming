@@ -314,7 +314,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <li>Open a <code class="arg">.cpp</code> file, type <code class="kw">normal</code>, hit Tab &mdash; the base template.</li>
           <li>Type any trigger from a pane below (e.g. <code class="kw">DSU</code>, <code class="kw">SegTree</code>) and Tab again.</li>
           <li>Forgot a trigger? Type <code class="kw">list</code>, hit Tab &mdash; prints every trigger + description as a comment, read live from <code class="arg">INDEX.md</code>.</li>
-          <li>No snippets? Open the file here, copy between <code class="arg">SNIPPET START</code> / <code class="arg">END</code>.</li>
+          <li>No snippets? Press <code class="arg">copy</code> on a row: it copies the clean template from <code class="arg">lib/</code>, ready to paste under the base template.</li>
           <li>Run <code class="kw">tests/run_all.sh</code> &mdash; compiles + runs every template's own stress test.</li>
         </ol>
         <p class="note">Triggers never redeclare <code>all</code>/<code>int</code>/<code>mod</code>/<code>N</code>/<code>inf</code> &mdash; every struct is self-contained, so cards never collide when pasted together. macOS: <code>brew install gcc astyle</code> once.</p>
@@ -397,7 +397,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">order-statistics set/map -- kth element, count-less-than<code class="c-hint">s.find_by_order(1); s.order_of_key(4);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-standard">standard</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Templete/PBDS.cpp" target="_blank" rel="noopener">PBDS.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Templete/PBDS.cpp" target="_blank" rel="noopener">PBDS.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Templete/PBDS.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="debug.hpp colored pretty-printer for containers, pairs, tuples templete/debug.hpp house">
           <td class="c-call">BASE03</td>
@@ -430,82 +430,82 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <tr class="row" data-search="dsu disjoint-set union, path compression + union by size graphs/dsu.cpp house">
           <td class="c-call">GR01</td>
           <td class="c-trig">DSU</td>
-          <td class="c-blurb">disjoint-set union, path compression + union by size<code class="c-hint">dsu.unite(u,v); dsu.connected(u,v);</code></td>
+          <td class="c-blurb">disjoint-set union, path compression + union by size<code class="c-hint">DSU d(n); d.unite(u, v); d.connected(u, v); d.compSize(u);</code></td>
           <td class="c-cplx">O(a(n))</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/DSU.cpp" target="_blank" rel="noopener">DSU.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/DSU.cpp" target="_blank" rel="noopener">DSU.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/DSU.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="dijkstra shortest paths, non-negative weights graphs/dijkstra.cpp house">
           <td class="c-call">GR02</td>
           <td class="c-trig">Dijkstra</td>
-          <td class="c-blurb">shortest paths, non-negative weights<code class="c-hint">dj.addEdge(u,v,w); dj.run(src); dj.dist[v];</code></td>
+          <td class="c-blurb">shortest paths, non-negative weights<code class="c-hint">Dijkstra dj(n); dj.addEdge(u, v, w); dj.run(src); dj.dist[v];</code></td>
           <td class="c-cplx">O((n+m) log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/Dijkstra.cpp" target="_blank" rel="noopener">Dijkstra.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/Dijkstra.cpp" target="_blank" rel="noopener">Dijkstra.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/Dijkstra.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="bellmanford shortest paths with negative weights + cycle detection graphs/bellmanford.cpp kactl">
           <td class="c-call">GR03</td>
           <td class="c-trig">BellmanFord</td>
-          <td class="c-blurb">shortest paths with negative weights + cycle detection<code class="c-hint">bf.dist[v]; bf.poisoned[v];</code></td>
+          <td class="c-blurb">shortest paths with negative weights + cycle detection<code class="c-hint">BellmanFord bf(n); bf.addEdge(u, v, w); bf.run(src); bf.dist[v];</code></td>
           <td class="c-cplx">O(n*m)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BellmanFord.cpp" target="_blank" rel="noopener">BellmanFord.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/BellmanFord.cpp" target="_blank" rel="noopener">BellmanFord.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/BellmanFord.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="binarylift lca, kth ancestor, distance via binary lifting graphs/binarylifting.cpp kactl">
           <td class="c-call">GR04</td>
           <td class="c-trig">BinaryLift</td>
-          <td class="c-blurb">LCA, kth ancestor, distance via binary lifting<code class="c-hint">bl.lca(u,v); bl.kthAncestor(u,k);</code></td>
+          <td class="c-blurb">LCA, kth ancestor, distance via binary lifting<code class="c-hint">bl.addEdge(u, v); bl.init(); bl.lca(u, v); bl.dist(u, v); bl.kthAncestor(u, k);</code></td>
           <td class="c-cplx">O(log n) qry</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BinaryLifting.cpp" target="_blank" rel="noopener">BinaryLifting.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/BinaryLifting.cpp" target="_blank" rel="noopener">BinaryLifting.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/BinaryLifting.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="scc tarjan&#x27;s strongly connected components, iterative graphs/scc.cpp kactl">
           <td class="c-call">GR05</td>
           <td class="c-trig">SCC</td>
-          <td class="c-blurb">Tarjan&#x27;s strongly connected components, iterative<code class="c-hint">scc.run(); scc.comp[v];</code></td>
+          <td class="c-blurb">Tarjan&#x27;s strongly connected components, iterative<code class="c-hint">scc.addEdge(u, v); scc.run(); scc.comp[v]; scc.sccCount;</code></td>
           <td class="c-cplx">O(n+m)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/SCC.cpp" target="_blank" rel="noopener">SCC.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/SCC.cpp" target="_blank" rel="noopener">SCC.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/SCC.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="bridges bridges + articulation points in one dfs graphs/bridgesarticulation.cpp kactl">
           <td class="c-call">GR06</td>
           <td class="c-trig">Bridges</td>
-          <td class="c-blurb">bridges + articulation points in one DFS<code class="c-hint">ba.bridges; ba.isArt[v];</code></td>
+          <td class="c-blurb">bridges + articulation points in one DFS<code class="c-hint">ba.addEdge(u, v); ba.run();</code></td>
           <td class="c-cplx">O(n+m)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/BridgesArticulation.cpp" target="_blank" rel="noopener">BridgesArticulation.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/BridgesArticulation.cpp" target="_blank" rel="noopener">BridgesArticulation.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/BridgesArticulation.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="toposort topological sort, kahn&#x27;s algorithm graphs/toposort.cpp kactl">
           <td class="c-call">GR07</td>
           <td class="c-trig">TopoSort</td>
-          <td class="c-blurb">topological sort, Kahn&#x27;s algorithm<code class="c-hint">auto order = topoSort(n, adj);</code></td>
+          <td class="c-blurb">topological sort, Kahn&#x27;s algorithm<code class="c-hint">vector&lt;vector&lt;int&gt;&gt; adj(n); auto order = topoSort(n, adj);</code></td>
           <td class="c-cplx">O(n+m)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/TopoSort.cpp" target="_blank" rel="noopener">TopoSort.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/TopoSort.cpp" target="_blank" rel="noopener">TopoSort.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/TopoSort.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="hld heavy-light decomposition for path queries graphs/hld.cpp kactl">
           <td class="c-call">GR08</td>
           <td class="c-trig">HLD</td>
-          <td class="c-blurb">heavy-light decomposition for path queries<code class="c-hint">hld.process(u,v,[&amp;](l,r){...});</code></td>
+          <td class="c-blurb">heavy-light decomposition for path queries<code class="c-hint">hld.addEdge(u, v); hld.build(); hld.lca(u, v); hld.process(u, v, [&amp;](int l, int r) {...});</code></td>
           <td class="c-cplx">O(log^2 n)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/HLD.cpp" target="_blank" rel="noopener">HLD.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/HLD.cpp" target="_blank" rel="noopener">HLD.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/HLD.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="centroid centroid decomposition of a tree graphs/centroiddecomposition.cpp cp-algo">
           <td class="c-call">GR09</td>
           <td class="c-trig">Centroid</td>
-          <td class="c-blurb">centroid decomposition of a tree<code class="c-hint">cd.centroidParent[v];</code></td>
+          <td class="c-blurb">centroid decomposition of a tree<code class="c-hint">cd.addEdge(u, v); cd.build(); cd.centroidParent[v];</code></td>
           <td class="c-cplx">O(n log n)</td>
           <td class="c-prov"><span class="tag tag-cp-algo">cp-algo</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/CentroidDecomposition.cpp" target="_blank" rel="noopener">CentroidDecomposition.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/CentroidDecomposition.cpp" target="_blank" rel="noopener">CentroidDecomposition.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/CentroidDecomposition.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="dinic max flow, dinic&#x27;s algorithm graphs/dinic.cpp kactl">
           <td class="c-call">GR10</td>
           <td class="c-trig">Dinic</td>
-          <td class="c-blurb">max flow, Dinic&#x27;s algorithm<code class="c-hint">dn.addEdge(u,v,cap); dn.maxflow(s,t);</code></td>
+          <td class="c-blurb">max flow, Dinic&#x27;s algorithm<code class="c-hint">Dinic dn(n); dn.addEdge(u, v, c); int f = dn.maxflow(s, t);</code></td>
           <td class="c-cplx">O(E sqrt V)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Graphs/Dinic.cpp" target="_blank" rel="noopener">Dinic.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Graphs/Dinic.cpp" target="_blank" rel="noopener">Dinic.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Graphs/Dinic.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -533,7 +533,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">LCA + weighted path distance via binary lifting<code class="c-hint">wl.lca(u,v); wl.dist(u,v);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Trees/WeightedLCA.cpp" target="_blank" rel="noopener">WeightedLCA.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Trees/WeightedLCA.cpp" target="_blank" rel="noopener">WeightedLCA.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Trees/WeightedLCA.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -561,7 +561,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">Z-function + pattern occurrences<code class="c-hint">ZFunction::findOccurrences(p,t);</code></td>
           <td class="c-cplx">O(n)</td>
           <td class="c-prov"><span class="tag tag-cp-algo">cp-algo</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/ZFunction.cpp" target="_blank" rel="noopener">ZFunction.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Strings/ZFunction.cpp" target="_blank" rel="noopener">ZFunction.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Strings/ZFunction.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="kmp prefix-function string matching strings/kmp.cpp kactl">
           <td class="c-call">ST02</td>
@@ -569,15 +569,15 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">prefix-function string matching<code class="c-hint">kmp.match(text);</code></td>
           <td class="c-cplx">O(n+m)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/KMP.cpp" target="_blank" rel="noopener">KMP.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Strings/KMP.cpp" target="_blank" rel="noopener">KMP.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Strings/KMP.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="suffixarray suffix array + kasai&#x27;s lcp strings/suffixarray.cpp kactl">
           <td class="c-call">ST03</td>
           <td class="c-trig">SuffixArray</td>
           <td class="c-blurb">suffix array + Kasai&#x27;s LCP<code class="c-hint">sa.sa[i]; sa.rnk[i]; sa.lcp[i];</code></td>
-          <td class="c-cplx">O(n log^2 n)</td>
+          <td class="c-cplx">O(n log n)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/SuffixArray.cpp" target="_blank" rel="noopener">SuffixArray.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Strings/SuffixArray.cpp" target="_blank" rel="noopener">SuffixArray.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Strings/SuffixArray.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="ahocorasick multi-pattern matching automaton strings/ahocorasick.cpp kactl">
           <td class="c-call">ST04</td>
@@ -585,7 +585,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">multi-pattern matching automaton<code class="c-hint">ac.addPattern(p); ac.countMatches(t);</code></td>
           <td class="c-cplx">O(n+m+z)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/AhoCorasick.cpp" target="_blank" rel="noopener">AhoCorasick.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Strings/AhoCorasick.cpp" target="_blank" rel="noopener">AhoCorasick.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Strings/AhoCorasick.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="polyhash anti-hash-test-safe polynomial hash, string or array strings/polyhash.cpp house">
           <td class="c-call">ST05</td>
@@ -593,7 +593,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">anti-hash-test-safe polynomial hash, string or array<code class="c-hint">h.get(l,r); h.combine(lh,rh,rlen);</code></td>
           <td class="c-cplx">O(1) qry</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Strings/PolyHash.cpp" target="_blank" rel="noopener">PolyHash.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Strings/PolyHash.cpp" target="_blank" rel="noopener">PolyHash.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Strings/PolyHash.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -618,10 +618,10 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <tr class="row" data-search="modint modular integer type with operators maths/modint.cpp house">
           <td class="c-call">MA01</td>
           <td class="c-trig">ModInt</td>
-          <td class="c-blurb">modular integer type with operators<code class="c-hint">power(a,3); inverse(a);</code></td>
+          <td class="c-blurb">modular integer type with operators<code class="c-hint">mint a = 2; cout &lt;&lt; power(a, 3) &lt;&lt; a / 5; using mint2 = Modular&lt;1000000007&gt;;</code></td>
           <td class="c-cplx">O(log MOD)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/ModInt.cpp" target="_blank" rel="noopener">ModInt.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/ModInt.cpp" target="_blank" rel="noopener">ModInt.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/ModInt.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="ncr ncr/npr, auto-ready, sized to the base template&#x27;s n  house">
           <td class="c-call">MA02</td>
@@ -634,50 +634,50 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <tr class="row" data-search="comb ncr/npr with a custom max-n maths/combinatorics.cpp house">
           <td class="c-call">MA03</td>
           <td class="c-trig">Comb</td>
-          <td class="c-blurb">nCr/nPr with a custom max-N<code class="c-hint">Combinatorics C(200000); C.nCr(10,3);</code></td>
+          <td class="c-blurb">nCr/nPr with a custom max-N<code class="c-hint">Combinatorics C(maxN); C.nCr(a, b); C.nPr(a, b);</code></td>
           <td class="c-cplx">O(1) qry</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/Combinatorics.cpp" target="_blank" rel="noopener">Combinatorics.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/Combinatorics.cpp" target="_blank" rel="noopener">Combinatorics.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/Combinatorics.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="crt chinese remainder theorem, two congruences maths/crt.cpp kactl">
           <td class="c-call">MA04</td>
           <td class="c-trig">CRT</td>
-          <td class="c-blurb">Chinese Remainder Theorem, two congruences<code class="c-hint">auto [x,L] = crt(a,m,b,n);</code></td>
+          <td class="c-blurb">Chinese Remainder Theorem, two congruences<code class="c-hint">auto [x, L] = crt(a, m, b, n);</code></td>
           <td class="c-cplx">O(log)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/CRT.cpp" target="_blank" rel="noopener">CRT.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/CRT.cpp" target="_blank" rel="noopener">CRT.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/CRT.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="totient euler&#x27;s totient of a single value maths/totient.cpp cp-algo">
           <td class="c-call">MA05</td>
           <td class="c-trig">Totient</td>
-          <td class="c-blurb">Euler&#x27;s totient of a single value<code class="c-hint">int f = phi(36);  // 12</code></td>
+          <td class="c-blurb">Euler&#x27;s totient of a single value<code class="c-hint">int f = phi(n);</code></td>
           <td class="c-cplx">O(sqrt n)</td>
           <td class="c-prov"><span class="tag tag-cp-algo">cp-algo</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/Totient.cpp" target="_blank" rel="noopener">Totient.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/Totient.cpp" target="_blank" rel="noopener">Totient.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/Totient.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="fastpow binary exponentiation + inverse, runtime modulus maths/fastpow.cpp house">
           <td class="c-call">MA06</td>
           <td class="c-trig">FastPow</td>
-          <td class="c-blurb">binary exponentiation + inverse, runtime modulus<code class="c-hint">FastPow::power(b,e,m);</code></td>
+          <td class="c-blurb">binary exponentiation + inverse, runtime modulus<code class="c-hint">FastPow::power(b, e, m); FastPow::inverse(n, m);</code></td>
           <td class="c-cplx">O(log e)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/FastPow.cpp" target="_blank" rel="noopener">FastPow.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/FastPow.cpp" target="_blank" rel="noopener">FastPow.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/FastPow.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="ntt polynomial multiplication mod 998244353 maths/ntt.cpp kactl">
           <td class="c-call">MA07</td>
           <td class="c-trig">NTT</td>
-          <td class="c-blurb">polynomial multiplication mod 998244353<code class="c-hint">NTT::multiply(a,b);</code></td>
+          <td class="c-blurb">polynomial multiplication mod 998244353<code class="c-hint">vector&lt;int&gt; c = NTT::multiply(a, b);</code></td>
           <td class="c-cplx">O(n log n)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/NTT.cpp" target="_blank" rel="noopener">NTT.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/NTT.cpp" target="_blank" rel="noopener">NTT.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/NTT.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="sieve linear sieve, primality + factorization maths/primes.cpp cp-algo">
           <td class="c-call">MA08</td>
           <td class="c-trig">Sieve</td>
-          <td class="c-blurb">linear sieve, primality + factorization<code class="c-hint">sv.isPrime(97); sv.factorize(360);</code></td>
+          <td class="c-blurb">linear sieve, primality + factorization<code class="c-hint">Sieve sv(n); sv.isPrime(x); sv.factorize(x); sv.primes;</code></td>
           <td class="c-cplx">O(N) build</td>
           <td class="c-prov"><span class="tag tag-cp-algo">cp-algo</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Maths/primes.cpp" target="_blank" rel="noopener">primes.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Maths/primes.cpp" target="_blank" rel="noopener">primes.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Maths/primes.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -705,7 +705,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">iterative point-update range-query, generic op<code class="c-hint">st.update(i,val); st.query(l,r);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/SegmentTree.cpp" target="_blank" rel="noopener">SegmentTree.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/SegmentTree.cpp" target="_blank" rel="noopener">SegmentTree.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/SegmentTree.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="lazysegtree range-update range-query, generic op segmenttree/lazysegmenttree.cpp house">
           <td class="c-call">SG02</td>
@@ -713,7 +713,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">range-update range-query, generic op<code class="c-hint">st.Add(l,r,v); st.Sum(l,r);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/LazySegmentTree.cpp" target="_blank" rel="noopener">LazySegmentTree.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/LazySegmentTree.cpp" target="_blank" rel="noopener">LazySegmentTree.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/LazySegmentTree.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="persistentsegtree versioned segment tree, old versions stay queryable segmenttree/persistentsegmenttree.cpp standard">
           <td class="c-call">SG03</td>
@@ -721,7 +721,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">versioned segment tree, old versions stay queryable<code class="c-hint">pst.update(0,idx,val); pst.query(v2,l,r);</code></td>
           <td class="c-cplx">O(log n)/ver</td>
           <td class="c-prov"><span class="tag tag-standard">standard</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/PersistentSegmentTree.cpp" target="_blank" rel="noopener">PersistentSegmentTree.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/PersistentSegmentTree.cpp" target="_blank" rel="noopener">PersistentSegmentTree.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/PersistentSegmentTree.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="mergesorttree count-less-than / order-stat range queries, static segmenttree/mergesorttree.cpp house">
           <td class="c-call">SG04</td>
@@ -729,7 +729,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">count-less-than / order-stat range queries, static<code class="c-hint">mst.countLess(l,r,x);</code></td>
           <td class="c-cplx">O(log^2 n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/MergeSortTree.cpp" target="_blank" rel="noopener">MergeSortTree.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/MergeSortTree.cpp" target="_blank" rel="noopener">MergeSortTree.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/MergeSortTree.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="maxsubarrayseg max-subarray-sum segment tree, point-set segmenttree/dynamicsubarraysum.cpp house">
           <td class="c-call">SG05</td>
@@ -737,7 +737,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">max-subarray-sum segment tree, point-set<code class="c-hint">st.modify(pos,val); st.query(l,r);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/DynamicSubarraySum.cpp" target="_blank" rel="noopener">DynamicSubarraySum.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/DynamicSubarraySum.cpp" target="_blank" rel="noopener">DynamicSubarraySum.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/DynamicSubarraySum.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="rangetogglesum range xor-toggle on a binary array + range sum segmenttree/rangetogglesum.cpp house">
           <td class="c-call">SG06</td>
@@ -745,7 +745,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">range XOR-toggle on a binary array + range sum<code class="c-hint">st.toggle(l,r); st.query(l,r);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/SegmentTree/RangeToggleSum.cpp" target="_blank" rel="noopener">RangeToggleSum.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/SegmentTree/RangeToggleSum.cpp" target="_blank" rel="noopener">RangeToggleSum.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/SegmentTree/RangeToggleSum.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -770,34 +770,34 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <tr class="row" data-search="fenwick point-update range-sum bit + binary search fenwicktree/fenwicktree.cpp house">
           <td class="c-call">FN01</td>
           <td class="c-trig">Fenwick</td>
-          <td class="c-blurb">point-update range-sum BIT + binary search<code class="c-hint">f.update(idx,val); f.lower_bound(val);</code></td>
+          <td class="c-blurb">point-update range-sum BIT + binary search<code class="c-hint">f.update(i, v); f.query(l, r); f.lower_bound(v);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickTree.cpp" target="_blank" rel="noopener">FenwickTree.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/FenwickTree/FenwickTree.cpp" target="_blank" rel="noopener">FenwickTree.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/FenwickTree/FenwickTree.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="fenwickrupq range-update point-query bit fenwicktree/fenwickrangeupdatepointquery.cpp standard">
           <td class="c-call">FN02</td>
           <td class="c-trig">FenwickRUPQ</td>
-          <td class="c-blurb">range-update point-query BIT<code class="c-hint">f.update(l,r,val); f.query(idx);</code></td>
+          <td class="c-blurb">range-update point-query BIT<code class="c-hint">f.update(l, r, v); f.query(i);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-standard">standard</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickRangeUpdatePointQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdatePointQuery.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/FenwickTree/FenwickRangeUpdatePointQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdatePointQuery.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/FenwickTree/FenwickRangeUpdatePointQuery.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="fenwickrurq range-update range-query bit, two-bit trick fenwicktree/fenwickrangeupdaterangequery.cpp standard">
           <td class="c-call">FN03</td>
           <td class="c-trig">FenwickRURQ</td>
-          <td class="c-blurb">range-update range-query BIT, two-BIT trick<code class="c-hint">f.update(l,r,val); f.query(l,r);</code></td>
+          <td class="c-blurb">range-update range-query BIT, two-BIT trick<code class="c-hint">f.update(l, r, v); f.query(l, r);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-standard">standard</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/FenwickRangeUpdateRangeQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdateRangeQuery.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/FenwickTree/FenwickRangeUpdateRangeQuery.cpp" target="_blank" rel="noopener">FenwickRangeUpdateRangeQuery.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/FenwickTree/FenwickRangeUpdateRangeQuery.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="fenwick2d 2d point-update rectangle-sum-query fenwicktree/fenwick2d.cpp standard">
           <td class="c-call">FN04</td>
           <td class="c-trig">Fenwick2D</td>
-          <td class="c-blurb">2D point-update rectangle-sum-query<code class="c-hint">f.update(x,y,val); f.query(x1,y1,x2,y2);</code></td>
+          <td class="c-blurb">2D point-update rectangle-sum-query<code class="c-hint">f.update(x, y, v); f.query(x1, y1, x2, y2);</code></td>
           <td class="c-cplx">O(log n log m)</td>
           <td class="c-prov"><span class="tag tag-standard">standard</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/FenwickTree/Fenwick2D.cpp" target="_blank" rel="noopener">Fenwick2D.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/FenwickTree/Fenwick2D.cpp" target="_blank" rel="noopener">Fenwick2D.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/FenwickTree/Fenwick2D.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -825,7 +825,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">O(1) RMQ, generic idempotent op (min/max/gcd)<code class="c-hint">st.query(l,r);  // NOT sum</code></td>
           <td class="c-cplx">O(1) qry</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/RMQ/SparseTable.cpp" target="_blank" rel="noopener">SparseTable.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/RMQ/SparseTable.cpp" target="_blank" rel="noopener">SparseTable.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/RMQ/SparseTable.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="rmq2d 2d range min/max query rmq/rmq2d.cpp house">
           <td class="c-call">RM02</td>
@@ -833,7 +833,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">2D range min/max query<code class="c-hint">st.query(x1,y1,x2,y2);</code></td>
           <td class="c-cplx">O(1) qry</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/RMQ/RMQ2D.cpp" target="_blank" rel="noopener">RMQ2D.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/RMQ/RMQ2D.cpp" target="_blank" rel="noopener">RMQ2D.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/RMQ/RMQ2D.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -858,50 +858,50 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <tr class="row" data-search="digitdp digit-dp skeleton with a worked toy example dp/digitdp.cpp house">
           <td class="c-call">DP01</td>
           <td class="c-trig">DigitDP</td>
-          <td class="c-blurb">digit-DP skeleton with a worked toy example<code class="c-hint">dp.count();  // count(R)-count(L-1)</code></td>
+          <td class="c-blurb">digit-DP skeleton with a worked toy example<code class="c-hint">DigitDP dp(bound, K); int ans = dp.count();</code></td>
           <td class="c-cplx">O(dig*states)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/DigitDP.cpp" target="_blank" rel="noopener">DigitDP.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/DigitDP.cpp" target="_blank" rel="noopener">DigitDP.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/DigitDP.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="bitmaskdp bitmask-dp skeleton, assignment-problem shape dp/bitmaskdp.cpp house">
           <td class="c-call">DP02</td>
           <td class="c-trig">BitmaskDP</td>
-          <td class="c-blurb">bitmask-DP skeleton, assignment-problem shape<code class="c-hint">dp.answer();</code></td>
+          <td class="c-blurb">bitmask-DP skeleton, assignment-problem shape<code class="c-hint">BitmaskDP dp(cost); int best = dp.answer();</code></td>
           <td class="c-cplx">O(2^n * n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/BitmaskDP.cpp" target="_blank" rel="noopener">BitmaskDP.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/BitmaskDP.cpp" target="_blank" rel="noopener">BitmaskDP.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/BitmaskDP.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="sosdp sum-over-subsets dp dp/sosdp.cpp cp-algo">
           <td class="c-call">DP03</td>
           <td class="c-trig">SOSDP</td>
-          <td class="c-blurb">sum-over-subsets DP<code class="c-hint">sos(f);  // g[mask]=sum over submasks</code></td>
+          <td class="c-blurb">sum-over-subsets DP<code class="c-hint">vector&lt;int&gt; g = sos(f);</code></td>
           <td class="c-cplx">O(n * 2^n)</td>
           <td class="c-prov"><span class="tag tag-cp-algo">cp-algo</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/SOSDP.cpp" target="_blank" rel="noopener">SOSDP.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/SOSDP.cpp" target="_blank" rel="noopener">SOSDP.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/SOSDP.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="dncopt divide-and-conquer dp optimization dp/divideandconqueropt.cpp kactl">
           <td class="c-call">DP04</td>
           <td class="c-trig">DnCOpt</td>
-          <td class="c-blurb">divide-and-conquer DP optimization<code class="c-hint">solveDnC(cur,prev,1,n,0,n-1,cost);</code></td>
+          <td class="c-blurb">divide-and-conquer DP optimization<code class="c-hint">solveDnC(cur, prev, 1, n, 0, n - 1, cost); cur[0] is the base case, handle it yourself.</code></td>
           <td class="c-cplx">O(n log n)~</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/DivideAndConquerOpt.cpp" target="_blank" rel="noopener">DivideAndConquerOpt.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/DivideAndConquerOpt.cpp" target="_blank" rel="noopener">DivideAndConquerOpt.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/DivideAndConquerOpt.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="knuthopt knuth&#x27;s dp optimization, quadrangle inequality dp/knuthopt.cpp kactl">
           <td class="c-call">DP05</td>
           <td class="c-trig">KnuthOpt</td>
-          <td class="c-blurb">Knuth&#x27;s DP optimization, quadrangle inequality<code class="c-hint">KnuthOpt opt(n,cost); opt.answer();</code></td>
+          <td class="c-blurb">Knuth&#x27;s DP optimization, quadrangle inequality<code class="c-hint">KnuthOpt opt(n, [&amp;](int i, int j) { return ...; }); int best = opt.answer();</code></td>
           <td class="c-cplx">O(n^2)</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/KnuthOpt.cpp" target="_blank" rel="noopener">KnuthOpt.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/KnuthOpt.cpp" target="_blank" rel="noopener">KnuthOpt.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/KnuthOpt.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="cht convex hull trick, max/min line envelope dp/convexhulltrick.cpp kactl">
           <td class="c-call">DP06</td>
           <td class="c-trig">CHT</td>
-          <td class="c-blurb">convex hull trick, max/min line envelope<code class="c-hint">lc.add(k,m); lc.query(x);</code></td>
+          <td class="c-blurb">convex hull trick, max/min line envelope<code class="c-hint">lc.add(k, m); lc.query(x);</code></td>
           <td class="c-cplx">O(log n) qry</td>
           <td class="c-prov"><span class="tag tag-KACTL">KACTL</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/DP/ConvexHullTrick.cpp" target="_blank" rel="noopener">ConvexHullTrick.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/DP/ConvexHullTrick.cpp" target="_blank" rel="noopener">ConvexHullTrick.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/DP/ConvexHullTrick.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -929,7 +929,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">stack with running minimum<code class="c-hint">ms.push(5); ms.getMin();</code></td>
           <td class="c-cplx">O(1)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/MinStack.cpp" target="_blank" rel="noopener">MinStack.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/MinStack.cpp" target="_blank" rel="noopener">MinStack.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/MinStack.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="prefixsuffixmex prefix/suffix mex of an array others/prefixsuffixmex.cpp house">
           <td class="c-call">MC02</td>
@@ -937,7 +937,7 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">prefix/suffix mex of an array<code class="c-hint">prefixSuffixMex(arr);</code></td>
           <td class="c-cplx">O(n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/PrefixSuffixMex.cpp" target="_blank" rel="noopener">PrefixSuffixMex.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/PrefixSuffixMex.cpp" target="_blank" rel="noopener">PrefixSuffixMex.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/PrefixSuffixMex.cpp">copy</button></td>
         </tr>
           <tr class="row" data-search="ternarysearch ternary search on a unimodal integer function others/ternarysearch.cpp house">
           <td class="c-call">MC03</td>
@@ -945,7 +945,39 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
           <td class="c-blurb">ternary search on a unimodal integer function<code class="c-hint">ternarySearchMin(lo,hi,f);</code></td>
           <td class="c-cplx">O(log n)</td>
           <td class="c-prov"><span class="tag tag-house">house</span></td>
-          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/Others/TernarySearch.cpp" target="_blank" rel="noopener">TernarySearch.cpp</a></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/TernarySearch.cpp" target="_blank" rel="noopener">TernarySearch.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/TernarySearch.cpp">copy</button></td>
+        </tr>
+          <tr class="row" data-search="balmultiset multiset with lower median and sum of |v - median| others/balancedmultiset.cpp house">
+          <td class="c-call">MC04</td>
+          <td class="c-trig">BalMultiset</td>
+          <td class="c-blurb">multiset with lower median and sum of |v - median|<code class="c-hint">BalancedMultiset s: insert(x), erase(x) (x must be present), size(), median() = LOWER medi</code></td>
+          <td class="c-cplx">O(log n)</td>
+          <td class="c-prov"><span class="tag tag-house">house</span></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/BalancedMultiset.cpp" target="_blank" rel="noopener">BalancedMultiset.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/BalancedMultiset.cpp">copy</button></td>
+        </tr>
+          <tr class="row" data-search="mindeque o(1) queue with running minimum (sliding window) others/minstack_mindeque.cpp house">
+          <td class="c-call">MC05</td>
+          <td class="c-trig">MinDeque</td>
+          <td class="c-blurb">O(1) queue with running minimum (sliding window)<code class="c-hint">MinDeque d (self-contained, two stacks): push_front/push_back(x), pop_front/pop_back(), fr</code></td>
+          <td class="c-cplx">O(1) amortised</td>
+          <td class="c-prov"><span class="tag tag-house">house</span></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/MinStack_Mindeque.cpp" target="_blank" rel="noopener">MinStack_Mindeque.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/MinStack_Mindeque.cpp">copy</button></td>
+        </tr>
+          <tr class="row" data-search="trie array trie: insert/erase, count words and prefixes others/wordtrie.cpp house">
+          <td class="c-call">MC06</td>
+          <td class="c-trig">Trie</td>
+          <td class="c-blurb">array trie: insert/erase, count words and prefixes<code class="c-hint">Trie t (lowercase a-z; change ALPHA/BASE for another alphabet): insert(s) (multiset: dupli</code></td>
+          <td class="c-cplx">O(len)</td>
+          <td class="c-prov"><span class="tag tag-house">house</span></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/WordTrie.cpp" target="_blank" rel="noopener">WordTrie.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/WordTrie.cpp">copy</button></td>
+        </tr>
+          <tr class="row" data-search="divwindow n/k minus max block frequency over divisor windows others/divisor_window.cpp house">
+          <td class="c-call">MC07</td>
+          <td class="c-trig">DivWindow</td>
+          <td class="c-blurb">n/k minus max block frequency over divisor windows<code class="c-hint">minimumOperationsToMakeKPeriodic(word, k)  (LeetCode 3137; k divides |word|): one operatio</code></td>
+          <td class="c-cplx">O(n)</td>
+          <td class="c-prov"><span class="tag tag-house">house</span></td>
+          <td class="c-src"><a class="src" href="https://github.com/mdnihal5/competitive-programming/blob/main/lib/Others/divisor_window.cpp" target="_blank" rel="noopener">divisor_window.cpp</a> <button class="copy-btn" type="button" data-raw="https://raw.githubusercontent.com/mdnihal5/competitive-programming/main/lib/Others/divisor_window.cpp">copy</button></td>
         </tr>
         </tbody>
       </table>
@@ -1079,6 +1111,26 @@ footer a:hover { color: var(--ac); border-bottom-style: solid; }
   document.addEventListener('keydown', function (e) {
     if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); }
     if (e.key === 'Escape' && document.activeElement === input) { input.value = ''; filter(); input.blur(); }
+  });
+})();
+
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('button[data-raw]');
+    if (!b) return;
+    var fail = function () { b.textContent = 'failed'; setTimeout(function () { b.textContent = 'copy'; }, 1400); };
+    fetch(b.getAttribute('data-raw')).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (text) {
+      var done = function () {
+        b.textContent = 'copied'; b.classList.add('copied');
+        setTimeout(function () { b.textContent = 'copy'; b.classList.remove('copied'); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, fail); return; }
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (err) { fail(); }
+      document.body.removeChild(ta);
+    }).catch(fail);
   });
 })();
 </script>

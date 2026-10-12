@@ -1,8 +1,6 @@
-// Author : md_nihal
-//
-// This mirrors the live `normal` UltiSnips snippet exactly (cpp.snippets resolves
-// the debug.hpp include path via python interpolation to this repo's clone location;
-// here it's a plain relative include since this file already lives beside debug.hpp).
+/*
+        Author: md_nihal
+*/
 
 #include "bits/stdc++.h"
 using namespace std;

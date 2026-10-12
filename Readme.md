@@ -31,22 +31,15 @@ previews every step without changing anything.
 ## Layout
 
 ```
-Templete/       the base `normal` template, debug.hpp, PBDS
-Graphs/         Dijkstra, Bellman-Ford, SCC, bridges/articulation, toposort,
-                binary lifting (LCA/kth-ancestor), HLD, centroid decomp, Dinic, DSU
-Trees/          weighted LCA
-Strings/        Z-function, KMP, suffix array + LCP, Aho-Corasick, poly hashing
-Maths/          ModInt, nCr/combinatorics, CRT, totient, fast pow + inverse, NTT, sieve
-SegmentTree/    iterative segtree, lazy segtree, persistent segtree, merge sort
-                tree, max-subarray segtree, range-toggle segtree
-FenwickTree/    point-update, range-update point-query, range-update range-query
-                (two-BIT trick), 2D
-RMQ/            sparse table (1D + 2D), O(1) query
-DP/             digit-DP / bitmask-DP / SOS-DP skeletons, D&C opt, Knuth's opt
-Others/         min-stack, prefix/suffix mex, ternary search
-vimrc/          copies of .vimrc, UltiSnips/cpp.snippets, UltiSnips/INDEX.md,
-                bash_aliases -- the actual files this machine uses, mirrored here
-tests/          run_all.sh -- compiles + runs every template's own test
+lib/            the templates: code only, no comments, no includes. Copy a file as is.
+  Graphs/ Trees/ Strings/ Maths/ SegmentTree/ FenwickTree/ RMQ/ DP/ Others/
+  Templete/     PBDS
+tests/          one <Name>.test.cpp per template: usage notes in its header comment,
+                fixed cases + brute-force stress. run_all.sh runs them all.
+Templete/       the base `normal` template and debug.hpp (the Vim snippet resolves this path)
+vimrc/          .vimrc, UltiSnips/cpp.snippets + INDEX.md (generated), bash_aliases
+tools/gen.py    regenerates cpp.snippets and INDEX.md from lib/ and tests/
+index.html      the web catalogue (GitHub Pages), each row has a copy button
 ```
 
 ## Using a template
@@ -57,16 +50,18 @@ trigger from `vimrc/UltiSnips/INDEX.md` (e.g. `DSU`, `SegTree`, `BinaryLift`)
 and hit Tab again to paste that algorithm in. Triggers don't redeclare
 `all`/`ALL`/`int`/`mod`/`N`/`inf`/`debug` — they assume `normal` already ran.
 
-**Without the snippets**: open the relevant `.cpp` file in this repo directly.
-Everything between `/* ---- SNIPPET START ---- */` and `/* ---- SNIPPET END ---- */`
-is exactly what the UltiSnips trigger pastes — copy that block. Everything
-outside those markers (includes, macros, the `#ifdef LOCAL_TEST` block) is the
-file's own standalone test harness, not part of what gets pasted.
+**Without the snippets** (phone, browser, another machine): open the catalogue
+page and press `copy` on a row, or open `lib/<Category>/<Name>.cpp` and copy the
+whole file. Paste it below the `normal` template (it expects `int` to be
+`long long` and `inf`, `mod`, `all()` to exist). Usage notes for each template are
+in the header comment of `tests/<Category>/<Name>.test.cpp`.
 
 `vimrc/UltiSnips/INDEX.md` is the lookup — every trigger, a one-line description,
 and a short usage example. `cpp.snippets` itself carries no comments by design
 (fast to read mid-contest); the index is where the explanation lives. **Keep it
-updated** whenever a snippet is added, renamed, or removed.
+updated** whenever a snippet is added, renamed, or removed: edit the table in
+`tools/gen.py` and run `python3 tools/gen.py`, which rewrites `cpp.snippets` and
+`INDEX.md` from `lib/` and the test headers. Never edit the generated parts by hand.
 
 Forgot a trigger name mid-contest? Type `list`, hit Tab — it prints every
 trigger + description as a comment block, right there in the file. It reads
@@ -79,25 +74,23 @@ mode only) — Vim's own completion, pointed at a custom function in
 `vimrc/vimrc` that substring-matches (case-insensitive) against every
 trigger, description and category in `INDEX.md`. Pick one, `<CR>` drops the
 real template code at the cursor, correctly re-indented — no Tab needed for
-46 of 48 triggers. See `INDEX.md`'s Meta section for the walkthrough, the
+50 of 52 triggers. See `INDEX.md`'s Meta section for the walkthrough, the
 `list`/`normal` exceptions, and why the query has to come before invoking,
 not after.
 
 ## Testing
 
-Every template has its own correctness test, compiled in via `-DLOCAL_TEST`,
-living below the `SNIPPET END` marker in the same file — not a separate mirror
-to keep in sync. Where a brute force is feasible (most graph/data-structure
-algorithms), the test is a real stress test: hundreds of random small inputs
-cross-checked against a trivial reference implementation, not one hand-picked
-example. Run the whole suite:
+Each template has its own test in `tests/<Category>/<Name>.test.cpp`, separate from
+the template so `lib/` stays paste-ready. Where a brute force is feasible the test
+is a stress test: hundreds of random small inputs cross-checked against a trivial
+reference, not one hand-picked example. Run everything, or one template:
 
 ```
 tests/run_all.sh
+tests/run_all.sh Graphs/DSU
 ```
 
-It compiles and runs every `.cpp` file's `LOCAL_TEST` block and reports
-pass/fail per file. Rerun it after editing any template.
+Rerun it after editing any template, then `python3 tools/gen.py` to refresh the snippets.
 
 ## Vim setup
 

@@ -73,174 +73,166 @@ expand trigger.
 ## Templates & data structures
 
 ### `PBDS` — ordered_set / ordered_map (order statistics)
-```cpp
-ordered_set<int> s;
-s.insert(5); s.insert(1); s.insert(3);
-s.find_by_order(1);        // iterator to the 2nd smallest (0-indexed) -> 3
-s.order_of_key(4);         // count of elements strictly < 4 -> 3
-// duplicates collapse in a plain ordered_set (it's a set) -- use ordered_set<pair<int,int>>
-// with a unique tiebreaker (e.g. insertion index) if you need multiset behaviour.
 ```
-Source: `Templete/PBDS.cpp`
+ordered_set<T>: s.find_by_order(k) -> iterator to k-th smallest (0-indexed), s.order_of_key(x) -> #elements < x.
+ordered_map<K,V>: same two calls. A set collapses duplicates: for multiset use ordered_set<pair<int,int>> with a unique id.
+Erase by value: s.erase(x). The #undef/#define int sandwich is required when `int` is already macro-ed to long long.
+```
+Source: `lib/Templete/PBDS.cpp`
 
 ### `DSU` — disjoint set union, path compression + union by size
-```cpp
-DSU dsu(n);           // 0-indexed, n elements
-dsu.unite(u, v);
-dsu.connected(u, v);
-dsu.compSize(u);      // size of u's component
 ```
-Source: `Graphs/DSU.cpp`
+DSU: 0-indexed, path compression + union by size, near O(1) per op. unite returns false if already joined.
+Usage: DSU d(n); d.unite(u, v); d.connected(u, v); d.compSize(u);
+```
+Source: `lib/Graphs/DSU.cpp`
 
 ## Graphs
 
 ### `Dijkstra` — shortest paths, non-negative weights
-```cpp
-Dijkstra dj(n);
-dj.addEdge(u, v, w);        // directed; add both ways for an undirected edge
-dj.run(src);
-dj.dist[v]      // inf = unreachable, else shortest distance from src
 ```
-Source: `Graphs/Dijkstra.cpp`
+Dijkstra: 0-indexed, directed edges (add both ways if undirected), weights must be >= 0, O((n+m) log m).
+dist[v] = inf if unreachable.
+Usage: Dijkstra dj(n); dj.addEdge(u, v, w); dj.run(src); dj.dist[v];
+```
+Source: `lib/Graphs/Dijkstra.cpp`
 
 ### `BellmanFord` — shortest paths, negative weights + negative-cycle detection
-```cpp
-BellmanFord bf(n);
-bf.addEdge(u, v, w);        // directed; repeat for every edge
-bf.run(src);
-bf.dist[v]      // inf = unreachable, -inf = poisoned by a negative cycle, else shortest dist
-bf.poisoned[v]  // explicit flag for the -inf case
 ```
-Source: `Graphs/BellmanFord.cpp`
+BellmanFord: 0-indexed, directed edges, any weights, O(n*m). dist = inf (unreachable), -inf (reachable
+from a negative cycle, also flagged in poisoned[]), else the shortest distance. Use Dijkstra if w >= 0.
+Usage: BellmanFord bf(n); bf.addEdge(u, v, w); bf.run(src); bf.dist[v];
+```
+Source: `lib/Graphs/BellmanFord.cpp`
 
 ### `BinaryLift` — LCA, kth ancestor, distance via binary lifting
-```cpp
-BinaryLift bl(n);
-bl.addEdge(u, v);           // repeat for every edge
-bl.init();                  // or init(root) for a single tree
-bl.lca(u, v); bl.dist(u, v); bl.kthAncestor(u, k);
 ```
-Source: `Graphs/BinaryLifting.cpp`
+BinaryLift: 0-indexed tree/forest, O(n log n) build, O(log n) lca/dist/kthAncestor (-1 if too far).
+init() roots every component at its smallest index; init(r) roots only the tree containing r.
+Usage: bl.addEdge(u, v); bl.init(); bl.lca(u, v); bl.dist(u, v); bl.kthAncestor(u, k);
+```
+Source: `lib/Graphs/BinaryLifting.cpp`
 
 ### `WeightedLCA` — LCA + weighted path distance via binary lifting
-```cpp
-WeightedLCA wl(n);
-wl.addEdge(u, v, w);        // repeat for every edge
-wl.init(root);
-wl.lca(u, v); wl.dist(u, v);   // dist = sum of edge weights on the u..v path
 ```
-Source: `Trees/WeightedLCA.cpp`
+WeightedLCA wl(n); wl.addEdge(u, v, w) per edge (0-indexed, weights may be 0); wl.init(root) once.
+wl.lca(u, v), wl.dist(u, v) = sum of edge weights on the path. Binary lifting: O(n log n) build, O(log n) query.
+init is an iterative DFS, so 2e5-deep path trees are fine. Tree must be connected.
+```
+Source: `lib/Trees/WeightedLCA.cpp`
 
 ### `SCC` — Tarjan's strongly connected components, iterative
-```cpp
-SCC scc(n);
-scc.addEdge(u, v);          // directed; repeat for every edge
-scc.run();
-scc.comp[v], scc.sccCount   // component id per node, total component count
 ```
-Source: `Graphs/SCC.cpp`
+SCC: 0-indexed directed graph, iterative Tarjan, O(n + m). comp[v] in [0, sccCount); ids are in
+reverse topological order of the condensation (edge u->v across components => comp[u] > comp[v]).
+Usage: scc.addEdge(u, v); scc.run(); scc.comp[v]; scc.sccCount;
+```
+Source: `lib/Graphs/SCC.cpp`
 
 ### `Bridges` — bridges + articulation points in one DFS
-```cpp
-BridgesArticulation ba(n);
-ba.addEdge(u, v);           // undirected; repeat for every edge (parallel edges are fine)
-ba.run();
-ba.bridges       // vector<pair<int,int>> of bridge edges
-ba.isArt[v]      // true iff v is an articulation point
 ```
-Source: `Graphs/BridgesArticulation.cpp`
+BridgesArticulation: 0-indexed undirected graph, parallel edges ok, iterative DFS, O(n + m).
+After run(): bridges = list of (parent, child) pairs, isArt[v] = articulation point.
+Usage: ba.addEdge(u, v); ba.run();
+```
+Source: `lib/Graphs/BridgesArticulation.cpp`
 
 ### `TopoSort` — topological sort, Kahn's algorithm
-```cpp
-vector<vector<int>> adj(n);   // adj[u] = list of v with edge u->v
-auto order = topoSort(n, adj);
-if (order.empty()) { // has a cycle }
 ```
-Source: `Graphs/TopoSort.cpp`
+topoSort: Kahn BFS, O(n + m). Returns a topological order of 0..n-1, or {} if the graph has a cycle.
+Usage: vector<vector<int>> adj(n); auto order = topoSort(n, adj);
+```
+Source: `lib/Graphs/TopoSort.cpp`
 
 ### `HLD` — heavy-light decomposition for path queries
-```cpp
-HLD hld(n, root);
-hld.addEdge(u, v);          // repeat for every tree edge
-hld.build();
-hld.lca(u, v);
-hld.process(u, v, [&](int l, int r) { result = combine(result, segtree.query(l, r)); });
-// point update at node u: segtree.update(hld.pos[u], newVal);
 ```
-Source: `Graphs/HLD.cpp`
+HLD: 0-indexed tree rooted at root, O(n) build, O(log n) lca, O(log n) chains per path.
+pos[] is a DFS preorder: subtree of u = [pos[u], pos[u] + subSize[u] - 1]. process() gives each chain
+as an inclusive pos range, NOT in u->v order (reorder inside op for non-commutative merges).
+Usage: hld.addEdge(u, v); hld.build(); hld.lca(u, v); hld.process(u, v, [&](int l, int r) {...});
+```
+Source: `lib/Graphs/HLD.cpp`
 
 ### `Centroid` — centroid decomposition of a tree
-```cpp
-CentroidDecomposition cd(n);
-cd.addEdge(u, v);           // repeat for every tree edge
-cd.build();
-cd.centroidParent[v]        // v's parent in the centroid tree (-1 for the overall root)
-// Typical use: for each query node, walk cd.centroidParent[] up to the root,
-// maintaining per-centroid aggregate structures (e.g. distances) along the way.
 ```
-Source: `Graphs/CentroidDecomposition.cpp`
+CentroidDecomposition: 0-indexed connected tree, O(n log n). centroidParent[v] = parent in the centroid
+tree (-1 for its root). Walk centroidParent upwards from a node to visit its O(log n) centroid ancestors.
+Usage: cd.addEdge(u, v); cd.build(); cd.centroidParent[v];
+```
+Source: `lib/Graphs/CentroidDecomposition.cpp`
 
 ### `Dinic` — max flow, Dinic's algorithm
-```cpp
-Dinic dn(n);
-dn.addEdge(u, v, cap);      // directed; pass rcap too for an undirected edge
-dn.maxflow(s, t);
 ```
-Source: `Graphs/Dinic.cpp`
+Dinic: 0-indexed max flow, O(V^2 E) worst case, recursion depth up to the s-t path length.
+addEdge(u, v, cap, rcap = 0): pass rcap = cap for an undirected edge. edges[id].flow = flow on edge id.
+Usage: Dinic dn(n); dn.addEdge(u, v, c); int f = dn.maxflow(s, t);
+```
+Source: `lib/Graphs/Dinic.cpp`
 
 ## Strings
 
 ### `ZFunction` — Z-function + pattern occurrences
-```cpp
-ZFunction zf(s);                             // zf.z[i] as above, zf.z[0] left 0
-auto occ = ZFunction::findOccurrences(p, t);  // 0-indexed match positions of p in t
 ```
-Source: `Strings/ZFunction.cpp`
+ZFunction zf(s): zf.z[i] = LCP(s, s[i..]), z[0] = 0.
+ZFunction::findOccurrences(p, t) -> 0-indexed starts of p in t (assumes char \1 absent from input). O(|p| + |t|).
+```
+Source: `lib/Strings/ZFunction.cpp`
 
 ### `KMP` — prefix-function string matching
-```cpp
-KMP kmp(pattern);
-vector<int> occ = kmp.match(text);   // 0-indexed starting positions of pattern in text
 ```
-Source: `Strings/KMP.cpp`
+KMP kmp(pattern) (pattern non-empty); kmp.pi = prefix function.
+kmp.match(text) -> 0-indexed start positions of every (overlapping) occurrence. O(|pat| + |text|).
+```
+Source: `lib/Strings/KMP.cpp`
 
-### `SuffixArray` — O(n log^2 n) suffix array + Kasai's LCP
-```cpp
-SuffixArray sa(s);
-sa.sa[i]   // i-th suffix in sorted order (start index into s)
-sa.rnk[i]  // rank of the suffix starting at i
-sa.lcp[i]  // LCP between sa.sa[i] and sa.sa[i-1], for i >= 1 (min-LCP over a
-// range of sa.sa via a sparse table on sa.lcp gives LCP of any two suffixes)
+### `SuffixArray` — O(n log n) suffix array + Kasai's LCP
 ```
-Source: `Strings/SuffixArray.cpp`
+SuffixArray s(str): sa[i] = start of i-th smallest suffix, rnk = inverse of sa,
+lcp[i] = LCP(suffix sa[i], suffix sa[i-1]), lcp[0] = 0. Works for any bytes, any |s| >= 0.
+O(n log n) prefix doubling with counting sort + Kasai. LCP of arbitrary suffixes = range-min of lcp (SparseTable).
+```
+Source: `lib/Strings/SuffixArray.cpp`
 
 ### `AhoCorasick` — multi-pattern string matching automaton
-```cpp
-AhoCorasick ac;
-for (auto &p : patterns) ac.addPattern(p);
-ac.build();
-int matches = ac.countMatches(text);
 ```
-Source: `Strings/AhoCorasick.cpp`
+AhoCorasick ac; ac.addPattern(p) for each pattern; ac.build() ONCE after all adds.
+ac.countMatches(text) = total (overlapping, duplicates-counted) occurrences of all patterns.
+Alphabet is ALPHA/BASE (default a-z); change both constants for another alphabet. O(total + |text|*1).
+```
+Source: `lib/Strings/AhoCorasick.cpp`
 
 ### `PolyHash` — anti-hash-test-safe polynomial hash, string or array
-```cpp
-PolyHash h(s);                // string, or PolyHash h(vec) for any numeric array
-h.get(l, r);                   // hash of the [l, r] inclusive range
-h.combine(leftHash, rightHash, rightLen);  // concatenate two hashes
 ```
-Source: `Strings/PolyHash.cpp`
+PolyHash h(string) or h(vector<T>) (any integer T, negatives ok); 0-indexed.
+h.get(l, r) inclusive substring hash mod 2^61-1 with a random base per run; h.combine(hashL, hashR, lenR) = hash of concat.
+O(n) build, O(1) get. Every element maps to [1, MOD-1], so [-1, 5] never collides with [5] (old code mapped -1 to 0).
+```
+Source: `lib/Strings/PolyHash.cpp`
+
+### `Trie` — array trie: insert/erase, count words and prefixes
+```
+Trie t (lowercase a-z; change ALPHA/BASE for another alphabet): insert(s) (multiset: duplicates counted),
+search(s) exact word, startsWith(prefix), remove(s) -> false if absent (removes one copy).
+O(|s|) each. Nodes are never freed (counters keep it correct), so memory = total inserted length * 26 * 8 bytes.
+```
+Source: `lib/Others/WordTrie.cpp`
 
 ## Math
 
 ### `ModInt` — modular integer type with operators
-```cpp
-mint a = 2;
-cout << power(a, 3);          // 8
-assert(a * inverse(a) == 1);
-// different fixed modulus: using mint2 = Modular<1'000'000'007>;
 ```
-Source: `Maths/ModInt.cpp`
+Modular<MOD>: MOD must be prime (division uses Fermat), +,-,*,/ , power(a, e >= 0), inverse(a), cin/cout.
+Usage: mint a = 2; cout << power(a, 3) << a / 5; using mint2 = Modular<1000000007>;
+```
+Source: `lib/Maths/ModInt.cpp`
+
+### `Comb` — nCr/nPr, custom max-N (see also existing nCr)
+```
+Combinatorics: factorial tables mod `mod` (must be a prime > maxN), O(maxN) build, O(1) nCr/nPr.
+Indices a must be <= maxN; out-of-range b gives 0.
+Usage: Combinatorics C(maxN); C.nCr(a, b); C.nPr(a, b);
+```
+Source: `lib/Maths/Combinatorics.cpp`
 
 ### `nCr` — nCr/nPr, auto-ready, fixed to the base template's N (existing snippet, unchanged)
 ```cpp
@@ -249,227 +241,237 @@ fac.ncr(n, r);
 fac.npr(n, r);
 ```
 
-### `Comb` — nCr/nPr, custom max-N
-```cpp
-Combinatorics C(200000);      // size to the largest n you'll query, not MAX by habit
-C.nCr(10, 3);                 // 120
-```
-Source: `Maths/Combinatorics.cpp`
-
 ### `CRT` — Chinese Remainder Theorem
-```cpp
-auto [x, L] = crt(a, m, b, n);   // x = a (mod m) and x = b (mod n), 0 <= x < L
-// for k > 2 congruences fold pairwise: r = crt(a1,m1,a2,m2); r = crt(r.first,r.second,a3,m3); ...
 ```
-Source: `Maths/CRT.cpp`
+crt(a, m, b, n): x = a (mod m), x = b (mod n), moduli need not be coprime; returns {x, lcm}, 0 <= x < lcm.
+Asserts when the system is inconsistent; lcm and m*n/g must fit in 64 bits. Fold pairwise for k > 2.
+Usage: auto [x, L] = crt(a, m, b, n);
+```
+Source: `lib/Maths/CRT.cpp`
 
 ### `Totient` — Euler's totient of a single value
-```cpp
-int f = phi(36);   // -> 12
 ```
-Source: `Maths/Totient.cpp`
+phi(n): Euler totient by trial division, O(sqrt n). phi(1) = 1.
+Usage: int f = phi(n);
+```
+Source: `lib/Maths/Totient.cpp`
 
 ### `FastPow` — binary exponentiation + inverse, runtime modulus
-```cpp
-FastPow::power(b, e, m);      // b^e mod m, any m that fits in unsigned long long
-FastPow::inverse(n, m);       // n^-1 mod m, requires gcd(n, m) == 1
-// fixed compile-time modulus + ergonomic operators: use ModInt.cpp's Modular<MOD> instead
 ```
-Source: `Maths/FastPow.cpp`
+FastPow: unsigned 64-bit modpow/mulmod via __uint128_t (any m < 2^63), O(log e).
+inverse(n, m) works for any m (not just prime) as long as gcd(n, m) == 1. For operator syntax use ModInt.
+Usage: FastPow::power(b, e, m); FastPow::inverse(n, m);
+```
+Source: `lib/Maths/FastPow.cpp`
 
 ### `NTT` — polynomial multiplication mod 998244353
-```cpp
-vector<int> c = NTT::multiply(a, b);   // a[i], b[i] already reduced mod 998244353
 ```
-Source: `Maths/NTT.cpp`
+NTT::multiply(a, b): convolution mod 998244353, O(n log n). Inputs must be reduced into [0, MOD);
+result size |a| + |b| - 1 (<= 2^23). Empty input gives empty output.
+Usage: vector<int> c = NTT::multiply(a, b);
+```
+Source: `lib/Maths/NTT.cpp`
 
 ### `Sieve` — linear sieve, primality + factorization
-```cpp
-Sieve sv(1000000);                 // sieve up to 1e6 -- size to what you actually need, not MAX by habit
-bool p = sv.isPrime(97);           // true
-vector<int32_t> f = sv.factorize(360); // {2,2,2,3,3,5}
 ```
-Source: `Maths/primes.cpp`
+Sieve: linear sieve up to n, O(n). spf = smallest prime factor, primes ascending. isPrime/factorize need
+x <= n; factorize is O(log x) with multiplicity. Stored as int32 on purpose (memory for n ~ 1e7).
+Usage: Sieve sv(n); sv.isPrime(x); sv.factorize(x); sv.primes;
+```
+Source: `lib/Maths/primes.cpp`
 
 ## Segment trees
 
 ### `SegTree` — iterative point-update range-query, generic op
-```cpp
-auto st = SegTree(a, 0, [](int a, int b){ return a + b; });  // 0-indexed, identity=0 for sum
-st.update(i, val);
-st.query(l, r);                // [l, r] inclusive
-// swap identity+lambda for min/max/gcd/xor etc -- that's the whole "modify per use case" step
 ```
-Source: `SegmentTree/SegmentTree.cpp`
+SegTree<T,F> st(a, identity, combine): 0-indexed, query(l, r) inclusive, update(i, v) = point assign.
+combine must be associative; commutativity NOT required (order is preserved).
+Build O(n), update/query O(log n). Iterative bottom-up, any n >= 1.
+```
+Source: `lib/SegmentTree/SegmentTree.cpp`
 
 ### `LazySegTree` — range-update range-query, generic op
-```cpp
-LazySegTree st(n);             // 1-indexed, valid range [1, n]
-st.Add(l, r, v);                // range add
-st.Sum(l, r); st.Min(l, r); st.Max(l, r);
 ```
-Source: `SegmentTree/LazySegmentTree.cpp`
+LazySegTree st(n): 1-indexed [1, n], all zeros initially.
+Add(l, r, v) range add; Min/Max/Sum(l, r) range queries. All O(log n).
+Needs inf (1e18) from the prelude as the min/max identity.
+```
+Source: `lib/SegmentTree/LazySegmentTree.cpp`
 
 ### `PersistentSegTree` — versioned segment tree
-```cpp
-auto pst = PersistentSegTree(a, 0, [](int a, int b){ return a + b; });  // version 0 = initial array
-int v2 = pst.update(0, idx, val);   // creates version v2 from version 0, doesn't mutate it
-pst.query(v2, l, r);            // query any version, including old ones, any time
 ```
-Source: `SegmentTree/PersistentSegmentTree.cpp`
+PersistentSegTree st(a, identity, combine): version 0 = a. 0-indexed.
+v2 = st.update(v, i, val) -> new version id (old versions stay valid); st.query(v, l, r) inclusive.
+Each update adds O(log n) nodes (total nodes <= 2n + updates*(log n + 1)); query O(log n).
+```
+Source: `lib/SegmentTree/PersistentSegmentTree.cpp`
 
 ### `MergeSortTree` — count-less-than / order-stat range queries
-```cpp
-MergeSortTree mst(a);           // static -- no point-update
-mst.countLess(l, r, x);         // count of a[i] < x in [l, r]
-mst.predecessor(l, r, x);       // largest a[i] <= x, else INT_MIN
-mst.successor(l, r, x);         // smallest a[i] >= x, else INT_MAX
 ```
-Source: `SegmentTree/MergeSortTree.cpp`
+MergeSortTree t(a): static array, 0-indexed, queries on [l, r] inclusive (no updates).
+countLess(l, r, x) = #a[i] < x; predecessor = largest a[i] <= x else -inf; successor = smallest a[i] >= x else inf.
+Build O(n log n) time+memory, query O(log^2 n). Values must satisfy |a[i]| < inf.
+```
+Source: `lib/SegmentTree/MergeSortTree.cpp`
 
 ### `MaxSubarraySeg` — max-subarray-sum segment tree
-```cpp
-MaxSubarraySegTree st(n, MaxSubarraySegTree::NEG_INF);  // all positions start "unset"
-st.modify(pos, val);            // set position pos to val
-st.query(l, r);                 // max subarray sum within [l, r]
 ```
-Source: `SegmentTree/DynamicSubarraySum.cpp`
+MaxSubarraySegTree st(a): 0-indexed, update(i, v) = point assign, query(l, r) = max NON-EMPTY subarray sum in [l, r].
+Values may be negative; |sum| should stay well below 1e18 (identity uses -inf).
+Build O(n), update/query O(log n). Iterative, any n >= 1.
+```
+Source: `lib/SegmentTree/DynamicSubarraySum.cpp`
 
 ### `RangeToggleSum` — range XOR-toggle + range sum
-```cpp
-ToggleSegTree st(n);            // binary array, starts all 0
-st.toggle(l, r);                // flip every bit in [l, r]
-st.query(l, r);                 // count of 1s in [l, r]
 ```
-Source: `SegmentTree/RangeToggleSum.cpp`
+ToggleSegTree st(n): 0-indexed binary array, all 0 initially.
+toggle(l, r) flips every bit in [l, r]; query(l, r) = number of ones in [l, r]. Both O(log n).
+```
+Source: `lib/SegmentTree/RangeToggleSum.cpp`
 
 ## Fenwick trees
 
 ### `Fenwick` — point-update range-sum + binary search
-```cpp
-Fenwick f(n);                   // 0-indexed, n elements
-f.update(idx, val);             // add val at idx
-f.query(idx);                   // prefix sum [0, idx]
-f.query(l, r);                  // range sum [l, r]
-f.lower_bound(val);             // smallest prefix index whose prefix sum >= val (needs non-negative updates)
 ```
-Source: `FenwickTree/FenwickTree.cpp`
+Fenwick: 0-indexed point add, prefix/range sum, O(log n). lower_bound(v) = first index whose prefix
+sum >= v (n if none); only valid while all stored values are >= 0.
+Usage: f.update(i, v); f.query(l, r); f.lower_bound(v);
+```
+Source: `lib/FenwickTree/FenwickTree.cpp`
 
 ### `FenwickRUPQ` — range-update point-query BIT
-```cpp
-FenwickRUPQ f(n);
-f.update(l, r, val);            // add val to every index in [l, r]
-f.query(idx);                   // current value at idx
 ```
-Source: `FenwickTree/FenwickRangeUpdatePointQuery.cpp`
+FenwickRUPQ: 0-indexed inclusive range add, point read, O(log n).
+Usage: f.update(l, r, v); f.query(i);
+```
+Source: `lib/FenwickTree/FenwickRangeUpdatePointQuery.cpp`
 
 ### `FenwickRURQ` — range-update range-query BIT (two-BIT trick)
-```cpp
-FenwickRURQ f(n);
-f.update(l, r, val);            // add val to every index in [l, r]
-f.query(l, r);                  // sum over [l, r]
 ```
-Source: `FenwickTree/FenwickRangeUpdateRangeQuery.cpp`
+FenwickRURQ: 0-indexed inclusive range add + range sum (two BITs), O(log n).
+Usage: f.update(l, r, v); f.query(l, r);
+```
+Source: `lib/FenwickTree/FenwickRangeUpdateRangeQuery.cpp`
 
 ### `Fenwick2D` — 2D point-update rectangle-sum-query
-```cpp
-Fenwick2D f(n, m);
-f.update(x, y, val);            // point update
-f.query(x1, y1, x2, y2);        // rectangle sum, inclusive
 ```
-Source: `FenwickTree/Fenwick2D.cpp`
+Fenwick2D: 0-indexed point update, rectangle sum (inclusive corners), O(log n * log m).
+Usage: f.update(x, y, v); f.query(x1, y1, x2, y2);
+```
+Source: `lib/FenwickTree/Fenwick2D.cpp`
 
 ## RMQ
 
 ### `SparseTable` — O(1) RMQ, generic idempotent op (min/max/gcd)
-```cpp
-auto st = SparseTable(a, [](int a, int b){ return min(a, b); });  // idempotent op only
-st.query(l, r);                 // [l, r] inclusive
-// swap the lambda for max/gcd -- NOT sum (sum isn't idempotent, would double-count overlap)
 ```
-Source: `RMQ/SparseTable.cpp`
+SparseTable<T,F> st(a, combine): 0-indexed, query(l, r) inclusive.
+combine must be associative AND idempotent (min/max/gcd/and/or), NOT sum.
+Build O(n log n) memory/time, query O(1).
+```
+Source: `lib/RMQ/SparseTable.cpp`
 
 ### `RMQ2D` — 2D range min/max query
-```cpp
-auto st = SparseTable2D(grid, [](int a, int b){ return min(a, b); });
-st.query(x1, y1, x2, y2);       // combine over the rectangle, inclusive
 ```
-Source: `RMQ/RMQ2D.cpp`
+SparseTable2D<T,F> st(grid, combine): 0-indexed, query(x1, y1, x2, y2) inclusive corners.
+combine must be associative + idempotent (min/max/gcd). Grid must be non-empty.
+Build O(nm log n log m) time and memory, query O(1).
+```
+Source: `lib/RMQ/RMQ2D.cpp`
 
 ## DP scaffolds & optimizations
 
 ### `DigitDP` — digit-DP skeleton with worked toy example
-```cpp
-DigitDP dp(bound, K);
-int answer = dp.count();     // # of integers in [0, bound] with digit sum <= K
-// For a range [L, R]: count(R) - count(L-1), same as any prefix-counting trick.
 ```
-Source: `DP/DigitDP.cpp`
+DigitDP: count integers in [0, bound] with digit sum <= K; state (pos, sum), non-tight memoised.
+Add problem state to solve()/memo and the end test at pos == size. Range [L,R]: count(R) - count(L-1)
+(negative bound is not supported, guard L=0).
+Usage: DigitDP dp(bound, K); int ans = dp.count();
+```
+Source: `lib/DP/DigitDP.cpp`
 
 ### `BitmaskDP` — bitmask-DP skeleton with worked toy example
-```cpp
-BitmaskDP dp(costMatrix);      // costMatrix[worker][task]
-int minCost = dp.answer();
 ```
-Source: `DP/BitmaskDP.cpp`
+BitmaskDP: assignment problem, cost[worker][task] (square), O(2^n * n). Edit solve() for other
+bitmask problems (worker = popcount(mask) trick).
+Usage: BitmaskDP dp(cost); int best = dp.answer();
+```
+Source: `lib/DP/BitmaskDP.cpp`
 
 ### `SOSDP` — sum-over-subsets DP
-```cpp
-vector<int> g = sos(f);   // f.size() must be a power of two (2^n); g[mask] = sum_{sub subseteq mask} f[sub]
-// For superset-sum instead of submask-sum: flip the condition to
-// `if (!(mask & (1<<bit)))` and combine mask with mask|(1<<bit).
 ```
-Source: `DP/SOSDP.cpp`
+sos(f): g[mask] = sum of f[sub] over submasks sub of mask; f.size() must be a power of two. O(n * 2^n).
+Superset sum: test (mask & b) == 0 and add f[mask | b]. Other ops (max, xor): change the +=.
+Usage: vector<int> g = sos(f);
+```
+Source: `lib/DP/SOSDP.cpp`
 
 ### `DnCOpt` — divide-and-conquer DP optimization
-```cpp
-// dp[i][j] built from dp[i-1] one layer at a time:
-vector<int> prev = ..., cur(n, LLONG_MAX);
-auto cost = [&](int k, int j) { return C(k, j); };   // your transition cost
-solveDnC(cur, prev, 1, n, 0, n - 1, cost);            // cur[0] handled separately (base case)
 ```
-Source: `DP/DivideAndConquerOpt.cpp`
+solveDnC: one layer of dp[j] = min_{k<j}(prev[k] + cost(k, j)) when opt(j) is monotone in j
+(quadrangle inequality). O(n log n) per layer. 0-indexed, fills cur[lo..hi).
+Usage: solveDnC(cur, prev, 1, n, 0, n - 1, cost); cur[0] is the base case, handle it yourself.
+```
+Source: `lib/DP/DivideAndConquerOpt.cpp`
 
 ### `KnuthOpt` — Knuth's DP optimization
-```cpp
-auto cost = [&](int i, int j) { return C(i, j); };   // your interval's base cost, quadrangle-inequality-satisfying
-KnuthOpt opt(n, cost);
-int best = opt.answer();
 ```
-Source: `DP/KnuthOpt.cpp`
+KnuthOpt: dp[i][j] = min_{i<=k<j}(dp[i][k] + dp[k+1][j]) + cost(i, j), 0-indexed, O(n^2) memory+time.
+Needs cost to satisfy the quadrangle inequality (opt[i][j-1] <= opt[i][j] <= opt[i+1][j]).
+Usage: KnuthOpt opt(n, [&](int i, int j) { return ...; }); int best = opt.answer();
+```
+Source: `lib/DP/KnuthOpt.cpp`
 
 ### `CHT` — convex hull trick, max/min line envelope
-```cpp
-LineContainer lc;
-lc.add(k, m);            // insert line y = k*x + m
-lc.query(x);              // max over all inserted lines at x
-// for MIN: lc.add(-k, -m), then -lc.query(x)
 ```
-Source: `DP/ConvexHullTrick.cpp`
+LineContainer (KACTL): max of lines k*x+m at x; amortised O(log n) add/query. Needs lines >= 1
+(query on empty set is UB). For MIN: add(-k, -m), answer is -query(x).
+Usage: lc.add(k, m); lc.query(x);
+```
+Source: `lib/DP/ConvexHullTrick.cpp`
 
 ## Misc
 
 ### `MinStack` — O(1) stack with running minimum
-```cpp
-MinStack ms;
-ms.push(5); ms.push(2); ms.push(7);
-ms.getMin();   // 2
-ms.pop();      // removes 7, getMin() still 2
 ```
-Source: `Others/MinStack.cpp`
+MinStack ms: push(x), pop(), top(), getMin() (min of whole stack), size(), empty(). All O(1).
+pop/top/getMin on an empty stack is undefined (check empty() first).
+```
+Source: `lib/Others/MinStack.cpp`
+
+### `MinDeque` — O(1) queue with running minimum (sliding window)
+```
+MinDeque d (self-contained, two stacks): push_front/push_back(x), pop_front/pop_back(), front(), back(),
+getMin() (min of whole deque), size(), empty(). Amortised O(1) (a one-sided drain splits the stack in half).
+Does not clash with Others/MinStack.cpp. Calls on an empty deque are undefined.
+```
+Source: `lib/Others/MinStack_Mindeque.cpp`
 
 ### `PrefixSuffixMex` — prefix/suffix mex of an array
-```cpp
-auto [preMex, suffMex] = prefixSuffixMex(arr);
-preMex[i]   // mex of arr[0..i]
-suffMex[i]  // mex of arr[i..n-1]
 ```
-Source: `Others/PrefixSuffixMex.cpp`
+auto [pre, suf] = prefixSuffixMex(a): pre[i] = mex(a[0..i]), suf[i] = mex(a[i..n-1]).
+Negative or > n values are ignored (cannot affect the mex). O(n) time and memory.
+```
+Source: `lib/Others/PrefixSuffixMex.cpp`
 
 ### `TernarySearch` — ternary search on a unimodal integer function
-```cpp
-int x = ternarySearchMin(lo, hi, [&](int x) { return f(x); });
-int fMin = f(x);
 ```
-Source: `Others/TernarySearch.cpp`
+ternarySearchMin(lo, hi, f): integer x in [lo, hi] minimising f; f strictly decreasing then strictly increasing
+(a flat run is allowed only at the minimum). For a maximum pass [&](int x){ return -f(x); }.
+Implemented as a binary search on the slope f(m) <= f(m+1): ~2*log2(range) evaluations, no plateau traps.
+```
+Source: `lib/Others/TernarySearch.cpp`
 
+### `BalMultiset` — multiset with lower median and sum of |v - median|
+```
+BalancedMultiset s: insert(x), erase(x) (x must be present), size(), median() = LOWER median (sorted[(size-1)/2]),
+query() = sum |v - median| over all elements (the min total cost to make all equal). Sliding-window median/cost.
+All O(log n); median()/query() need a non-empty set.
+```
+Source: `lib/Others/BalancedMultiset.cpp`
+
+### `DivWindow` — n/k minus max block frequency over divisor windows
+```
+minimumOperationsToMakeKPeriodic(word, k)  (LeetCode 3137; k divides |word|): one operation copies a k-block
+over another k-block. Answer = (#blocks) - (frequency of the most common k-block). O(|word|).
+```
+Source: `lib/Others/divisor_window.cpp`
